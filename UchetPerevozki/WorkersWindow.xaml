@@ -1,12 +1,11 @@
-﻿<Window x:Class="UchetPerevozki.HistoryReportsWindow"
+﻿<Window x:Class="UchetPerevozki.WorkersWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:UchetPerevozki"
         mc:Ignorable="d"
-        Loaded="Window_Loaded"
-        Title="HistoryReportsWindow" Height="700" Width="1380">
+        Title="WorkersWindow" Height="700" Width="1380">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="230"/>
@@ -19,11 +18,11 @@
             <TextBlock x:Name="userNameTextBlock" Text="" FontSize="20" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,15,0,0" />
 
             <Button Background="#00000000" BorderBrush="#00000000" BorderThickness="0" Width="230" Margin="0,65,0,0">
-                <Image Source="C:\Users\Дмитрий\Desktop\иконки\historyReportsActive.png" Stretch="Fill"  />
+                <Image Source="C:\Users\Дмитрий\Desktop\иконки\historyReports.png" Stretch="Fill"  />
             </Button>
 
             <Button Background="#00000000" BorderBrush="#00000000" BorderThickness="0" Width="230" Margin="0,20,0,0" >
-                <Image Source="C:\Users\Дмитрий\Desktop\иконки\personal.png" Stretch="Fill" />
+                <Image Source="C:\Users\Дмитрий\Desktop\иконки\workersActive.png" Stretch="Fill" />
             </Button>
 
             <Button Background="#00000000" BorderBrush="#00000000" BorderThickness="0" Width="230" Margin="0,20,0,0">
@@ -32,9 +31,11 @@
         </StackPanel>
 
         <!-- Основная область -->
-        <Grid Grid.Column="1" >
+        <Grid Grid.Column="1" Margin="10">
             <ScrollViewer>
-                <StackPanel x:Name="ReportsStackPanel" Margin="60,20,60,20"/>
+                <StackPanel x:Name="ReportsStackPanel" Orientation="Vertical">
+
+                </StackPanel>
             </ScrollViewer>
         </Grid>
     </Grid>
