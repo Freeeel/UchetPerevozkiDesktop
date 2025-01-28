@@ -1,0 +1,139 @@
+﻿using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
+
+namespace UchetPerevozki
+{
+    /// <summary>
+    /// Логика взаимодействия для HistoryReportsWindow.xaml
+    /// </summary>
+    public partial class HistoryReportsWindow : Window
+    {
+        private int _userId; // Это будет ID пользователя
+
+        public HistoryReportsWindow(int userId)
+        {
+            InitializeComponent();
+            _userId = userId; // Сохраняем ID пользователя
+        }
+
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                UserResponse userData = await GetUserDataAsync(_userId);
+                userNameTextBlock.Text = $"{userData.Name} {userData.Surname}";
+                var reports = await GetReportsAsync(_userId);
+                foreach (var report in reports)
+                {
+                    var reportCard = CreateReportCard(report);
+                    ReportsStackPanel.Children.Add(reportCard);
+                }
+
+            }
+            
+            catch (HttpRequestException httpEx)
+            {
+                MessageBox.Show($"Ошибка при обращении к API: {httpEx.Message}");
+            }
+            catch (JsonException jsonEx)
+            {
+                MessageBox.Show($"Ошибка десериализации: {jsonEx.Message}");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при загрузке данных пользователя: {ex.Message}");
+            }
+        }
+
+        private async Task<List<ReportResponse>> GetReportsAsync(int userId)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("http://172.20.10.11:8000"); // Замените на адрес вашего API
+                var response = await client.GetAsync($"/reports/user/{userId}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var responseData = await response.Content.ReadAsStringAsync();
+                    return JsonConvert.DeserializeObject<List<ReportResponse>>(responseData);
+                }
+                else
+                {
+                    throw new Exception($"Ошибка при получении отчетов: {response.StatusCode}");
+                }
+            }
+        }
+
+        private async Task<UserResponse> GetUserDataAsync(int userId)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("http://172.20.10.11:8000"); // Замените на адрес вашего приложения FastAPI
+
+                var response = await client.GetAsync($"/getuser/{userId}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var responseData = await response.Content.ReadAsStringAsync();
+                    return JsonConvert.DeserializeObject<UserResponse>(responseData);
+                }
+                else
+                {
+                    throw new Exception($"Ошибка при получении данных о пользователе: {response.StatusCode}");
+                }
+            }
+        }
+
+        private StackPanel CreateReportCard(ReportResponse report)
+        {
+
+
+            StackPanel card = new StackPanel
+            {
+                Margin = new Thickness(10)
+            };
+
+            Border border = new Border
+            {
+                BorderBrush = Brushes.Black,
+                BorderThickness = new Thickness(1),
+                CornerRadius = new CornerRadius(10),
+                Background = Brushes.White,
+                Padding = new Thickness(10)
+            };
+
+            StackPanel innerStack = new StackPanel();
+
+            innerStack.Children.Add(new TextBlock { Text = $"Отчёт № {report.Id}", FontSize = 16, FontWeight = FontWeights.Bold });
+            innerStack.Children.Add(new TextBlock { Text = report.report_date_time.ToString("dd.MM.yyyy"), FontWeight = FontWeights.Normal });
+            innerStack.Children.Add(new Line { X1 = 0, Y1 = 0, X2 = 1, Y2 = 0, Stroke = Brushes.Black, StrokeThickness = 1 });
+
+            innerStack.Children.Add(new TextBlock { Text = $"Откуда: {report.point_departure}", FontWeight = FontWeights.Bold });
+            innerStack.Children.Add(new TextBlock { Text = $"Куда: {report.point_destination}", FontWeight = FontWeights.Bold });
+            innerStack.Children.Add(new TextBlock { Text = $"Перевозчик: {report.sender}" });
+            innerStack.Children.Add(new TextBlock { Text = $"Вид древесины: {report.view_wood}" });
+            innerStack.Children.Add(new TextBlock { Text = $"Длина: {report.length_wood} метров" });
+            innerStack.Children.Add(new TextBlock { Text = $"Объём: {report.volume_wood}" });
+            innerStack.Children.Add(new TextBlock { Text = $"Ассортимент: {report.assortment_wood_type}" });
+            innerStack.Children.Add(new TextBlock { Text = $"Сорт: {report.variety_wood_type}" });
+
+            border.Child = innerStack;
+            card.Children.Add(border);
+
+            return card;
+        }
+    }
+}
