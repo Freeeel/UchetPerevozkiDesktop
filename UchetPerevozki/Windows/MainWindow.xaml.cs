@@ -24,7 +24,7 @@ namespace UchetPerevozki
         {
             using (var client = new HttpClient())
             {
-                client.BaseAddress = new Uri("http://172.20.10.11:8000"); // Замените на адрес вашего приложения FastAPI
+                client.BaseAddress = new Uri("http://192.168.8.143:8000"); // Замените на адрес вашего приложения FastAPI
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
