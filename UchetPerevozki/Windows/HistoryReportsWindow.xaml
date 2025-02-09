@@ -22,7 +22,7 @@
                 <Image Source="C:\Users\Дмитрий\Desktop\иконки\historyReportsActive.png" Stretch="Fill"  />
             </Button>
 
-            <Button Background="#00000000" BorderBrush="#00000000" BorderThickness="0" Width="230" Margin="0,20,0,0" >
+            <Button Background="#00000000" BorderBrush="#00000000" BorderThickness="0" Width="230" Margin="0,20,0,0" Click="Button_Click" >
                 <Image Source="C:\Users\Дмитрий\Desktop\иконки\personal.png" Stretch="Fill" />
             </Button>
 

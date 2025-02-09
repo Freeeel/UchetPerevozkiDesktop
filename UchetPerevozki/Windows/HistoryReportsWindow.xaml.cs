@@ -156,5 +156,12 @@ namespace UchetPerevozki
 
             return card;
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            WorkersWindow workersWindow = new WorkersWindow();
+            workersWindow.Show();
+            this.Close();
+        }
     }
 }

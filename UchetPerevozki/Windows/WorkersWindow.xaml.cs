@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -22,11 +24,236 @@ namespace UchetPerevozki
         public WorkersWindow()
         {
             InitializeComponent();
+            LoadData();
         }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private async void LoadData()
         {
-
+            try
+            {
+                var workers = await GetWorkersAsync();
+                WrapPanel wrapPanel = await CreateWorkerCards(workers);
+                WorkersStackPanel.Children.Clear();
+                WorkersStackPanel.Children.Add(wrapPanel);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка: {ex.Message}");
+            }
         }
+
+        private async Task<List<WorkerResponse>> GetWorkersAsync()
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("http://192.168.8.143:8000"); // Замените на адрес вашего API
+                var response = await client.GetAsync("/users/role/1"); // Получаем работников с role_id 1
+                if (response.IsSuccessStatusCode)
+                {
+                    var responseData = await response.Content.ReadAsStringAsync();
+                    return JsonConvert.DeserializeObject<List<WorkerResponse>>(responseData);
+                }
+                else
+                {
+                    throw new Exception($"Ошибка при получении работников: {response.StatusCode}");
+                }
+            }
+        }
+
+        private async Task<CarResponse> GetCarByWorkerIdAsync(int userId)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("http://192.168.8.143:8000"); // Замените на адрес вашего API
+                var response = await client.GetAsync($"/user/{userId}/car"); // Получаем машину работника
+                if (response.IsSuccessStatusCode)
+                {
+                    var responseData = await response.Content.ReadAsStringAsync();
+                    return JsonConvert.DeserializeObject<CarResponse>(responseData);
+                }
+                else
+                {
+                    throw new Exception($"Ошибка при получении машины для пользователя {userId}: {response.StatusCode}");
+                }
+            }
+        }
+
+        private async Task<WrapPanel> CreateWorkerCards(List<WorkerResponse> workers)
+        {
+            WrapPanel wrapPanel = new WrapPanel
+            {
+                Orientation = Orientation.Horizontal,
+                Width = 960,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalAlignment = VerticalAlignment.Top
+            };
+
+            foreach (var worker in workers)
+            {
+                StackPanel card = await CreateWorkerCard(worker);
+                wrapPanel.Children.Add(card);
+            }
+
+            return wrapPanel;
+        }
+
+        private async Task<StackPanel> CreateWorkerCard(WorkerResponse worker)
+        {
+            // Создание основной карточки
+            StackPanel card = new StackPanel
+            {
+                Margin = new Thickness(10),
+                Width = 334,
+            };
+
+            Border border = new Border
+            {
+                BorderBrush = Brushes.Black,
+                BorderThickness = new Thickness(1),
+                CornerRadius = new CornerRadius(5),
+                Background = Brushes.White,
+                Padding = new Thickness(10),
+            };
+
+            StackPanel innerStack = new StackPanel
+            {
+                Margin = new Thickness(-11, 0, -11, 0)
+            };
+
+            // Заголовок карточки с данными о работнике
+            StackPanel headerStack = new StackPanel
+            {
+                Orientation = Orientation.Horizontal,
+                Margin = new Thickness(20, 10, 20, 10)
+            };
+
+            Image avatarImage = new Image
+            {
+                Source = new BitmapImage(new Uri("C:\\Users\\Дмитрий\\Desktop\\иконки\\avaWork.png")),
+                Height = 72,
+                Width = 72
+            };
+
+            StackPanel workerInfoStack = new StackPanel
+            {
+                Margin = new Thickness(10, 0, 0, 0)
+            };
+
+            workerInfoStack.Children.Add(CreateTextBlock("ID:", worker.Id.ToString()));
+            workerInfoStack.Children.Add(CreateTextBlock("Дата рождения:", worker.date_of_birthday.ToString("dd/MM/yyyy")));
+            workerInfoStack.Children.Add(CreateTextBlock("ФИО:", $"{worker.surname} {worker.name} {worker.patronymic}"));
+
+            headerStack.Children.Add(avatarImage);
+            headerStack.Children.Add(workerInfoStack);
+
+            innerStack.Children.Add(headerStack);
+
+            // Разделитель
+            innerStack.Children.Add(new Line { X1 = 0, Y1 = 0, X2 = 334, Y2 = 0, Stroke = Brushes.Black, StrokeThickness = 1, Margin = new Thickness(0, 10, 0, 10) });
+
+            // Получаем машину для работника
+            var car = await GetCarByWorkerIdAsync(worker.Id);
+
+            // Убедитесь, что вы добавляете свои метки
+            innerStack.Children.Add(CreateLabel("Марка ТС:", car?.model));
+            innerStack.Children.Add(CreateLabel("Модель ТС:", car?.stamp));
+            innerStack.Children.Add(CreateLabel("Номер ТС:", car?.state_number));
+            innerStack.Children.Add(CreateLabel("Телефон:", worker.phone));
+            innerStack.Children.Add(CreateLabel("Адрес:", worker.address_residential));
+            innerStack.Children.Add(CreateLabel("Номер банковского счёта:", worker.bank_account_number));
+
+            border.Child = innerStack;
+            card.Children.Add(border);
+
+            return card;
+        }
+
+        private StackPanel CreateTextBlock(string label, string value)
+        {
+            StackPanel stackPanel = new StackPanel { Orientation = Orientation.Horizontal };
+            stackPanel.Children.Add(new TextBlock { Text = label, FontSize = 14, FontWeight = FontWeights.Bold });
+            stackPanel.Children.Add(new TextBlock { Text = value, FontSize = 14, Margin = new Thickness(5, 0, 0, 0) });
+
+            return stackPanel;
+        }
+
+        private StackPanel CreateLabel(string label, string value)
+        {
+            StackPanel stackPanel = new StackPanel { Margin = new Thickness(0, 5, 0, 0) };
+            TextBlock labelBlock = new TextBlock { Text = label, FontSize = 16 };
+            Border valueBorder = new Border
+            {
+                Width = 280,
+                Height = 32,
+                CornerRadius = new CornerRadius(5),
+                BorderThickness = new Thickness(1),
+                BorderBrush = Brushes.Black
+            };
+
+            Label innerLabel = new Label
+            {
+                Content = value ?? string.Empty,
+                Padding = new Thickness(5),
+                BorderThickness = new Thickness(0),
+                Width = 270,
+                Height = 26
+            };
+
+            valueBorder.Child = innerLabel;
+            stackPanel.Children.Add(labelBlock);
+            stackPanel.Children.Add(valueBorder);
+
+            return stackPanel;
+        }
+
+        private Border CreateDataBorder(string content, string label)
+        {
+            Border border = new Border
+            {
+                Width = 280,
+                Height = 32,
+                CornerRadius = new CornerRadius(5),
+                BorderThickness = new Thickness(1),
+                BorderBrush = Brushes.Black,
+            };
+
+            Label innerLabel = new Label
+            {
+                Content = $"{label}: {content}",
+                Padding = new Thickness(5),
+                BorderThickness = new Thickness(0),
+                Width = 270,
+                Height = 26
+            };
+
+            border.Child = innerLabel;
+            return border;
+        }
+    }
+
+    public class WorkerResponse
+    {
+        public int Id { get; set; }
+        public string name { get; set; }
+        public string surname { get; set; }
+        public string patronymic { get; set; }
+        public DateTime date_of_birthday { get; set; }
+        public string phone { get; set; }
+        public string address_residential { get; set; }
+        public string bank_account_number { get; set; }
+        public int role_id { get; set; }
+    }
+
+    public class CarResponse
+    {
+        public int CarId { get; set; } // ID автомобиля
+        public string state_number { get; set; } // Госномер
+        public string model { get; set; } // Модель
+        public string stamp { get; set; } // Марка автомобиля
+    }
+
+    public class WorkerWithCars
+    {
+        public WorkerResponse Worker { get; set; }
+        public CarResponse Car { get; set; } // Структура была изменена с List на CarResponse
     }
 }
