@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -24,7 +25,9 @@ namespace UchetPerevozki
         {
             using (var client = new HttpClient())
             {
-                client.BaseAddress = new Uri("http://192.168.8.143:8000"); // Замените на адрес вашего приложения FastAPI
+                string baseAddress = File.ReadAllText("C:\\Users\\Дмитрий\\source\\repos\\UchetPerevozki\\UchetPerevozki\\ipAddress.txt").Trim();
+                client.BaseAddress = new Uri(baseAddress);
+
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
@@ -41,7 +44,7 @@ namespace UchetPerevozki
 
                 if (response.IsSuccessStatusCode)
                 {
-                    var responseData = await response.Content.ReadAsStringAsync(); // Прочитайте содержимое как строку
+                    var responseData = await response.Content.ReadAsStringAsync(); 
                     return JsonConvert.DeserializeObject<UserResponse>(responseData);
                 }
                 else

@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -29,7 +30,7 @@ namespace UchetPerevozki
             _userId = userId; // Сохраняем ID пользователя
         }
 
-        private async void Window_Loaded(object sender, RoutedEventArgs e)
+        private async void WindowLoaded(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -64,7 +65,8 @@ namespace UchetPerevozki
         {
             using (var client = new HttpClient())
             {
-                client.BaseAddress = new Uri("http://192.168.8.143:8000"); // Замените на адрес вашего API
+                string baseAddress = File.ReadAllText("C:\\Users\\Дмитрий\\source\\repos\\UchetPerevozki\\UchetPerevozki\\ipAddress.txt").Trim();
+                client.BaseAddress = new Uri(baseAddress);
                 var response = await client.GetAsync($"/reports/all");
 
                 if (response.IsSuccessStatusCode)
@@ -83,7 +85,8 @@ namespace UchetPerevozki
         {
             using (var client = new HttpClient())
             {
-                client.BaseAddress = new Uri("http://192.168.8.143:8000"); // Замените на адрес вашего приложения FastAPI
+                string baseAddress = File.ReadAllText("C:\\Users\\Дмитрий\\source\\repos\\UchetPerevozki\\UchetPerevozki\\ipAddress.txt").Trim();
+                client.BaseAddress = new Uri(baseAddress);
 
                 var response = await client.GetAsync($"/getuser/{userId}");
 

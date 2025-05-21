@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -13,6 +14,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using UchetPerevozki.Response;
+using UchetPerevozki.Windows;
 
 namespace UchetPerevozki
 {
@@ -45,7 +48,8 @@ namespace UchetPerevozki
         {
             using (var client = new HttpClient())
             {
-                client.BaseAddress = new Uri("http://192.168.8.143:8000"); // Замените на адрес вашего API
+                string baseAddress = File.ReadAllText("C:\\Users\\Дмитрий\\source\\repos\\UchetPerevozki\\UchetPerevozki\\ipAddress.txt").Trim();
+                client.BaseAddress = new Uri(baseAddress); // Заменить на отдельный класс
                 var response = await client.GetAsync("/users/role/1"); // Получаем работников с role_id 1
                 if (response.IsSuccessStatusCode)
                 {
@@ -63,7 +67,8 @@ namespace UchetPerevozki
         {
             using (var client = new HttpClient())
             {
-                client.BaseAddress = new Uri("http://192.168.8.143:8000"); // Замените на адрес вашего API
+                string baseAddress = File.ReadAllText("C:\\Users\\Дмитрий\\source\\repos\\UchetPerevozki\\UchetPerevozki\\ipAddress.txt").Trim();
+                client.BaseAddress = new Uri(baseAddress);
                 var response = await client.GetAsync($"/user/{userId}/car"); // Получаем машину работника
                 if (response.IsSuccessStatusCode)
                 {
@@ -102,7 +107,7 @@ namespace UchetPerevozki
             StackPanel card = new StackPanel
             {
                 Margin = new Thickness(10),
-                Width = 334,
+                Width = 300,
             };
 
             Border border = new Border
@@ -161,10 +166,24 @@ namespace UchetPerevozki
             innerStack.Children.Add(CreateLabel("Адрес:", worker.address_residential));
             innerStack.Children.Add(CreateLabel("Номер банковского счёта:", worker.bank_account_number));
 
+            Button editButton = new Button
+            {
+                Content = "Редактировать",
+                Margin = new Thickness(10, 20, 10, 0),
+                Height = 30,
+                Width = 150,
+            };
+
+            // Обработчик клика по кнопке "Редактировать"
+            editButton.Click += (sender, e) => OnEditButtonClick(worker);
+
+            innerStack.Children.Add(editButton);
             border.Child = innerStack;
             card.Children.Add(border);
 
             return card;
+
+
         }
 
         private StackPanel CreateTextBlock(string label, string value)
@@ -179,14 +198,15 @@ namespace UchetPerevozki
         private StackPanel CreateLabel(string label, string value)
         {
             StackPanel stackPanel = new StackPanel { Margin = new Thickness(0, 5, 0, 0) };
-            TextBlock labelBlock = new TextBlock { Text = label, FontSize = 16 };
+            TextBlock labelBlock = new TextBlock { Text = label, FontSize = 16, Margin = new Thickness(25, 10, 0, 0) };
             Border valueBorder = new Border
             {
                 Width = 280,
                 Height = 32,
                 CornerRadius = new CornerRadius(5),
                 BorderThickness = new Thickness(1),
-                BorderBrush = Brushes.Black
+                BorderBrush = Brushes.Black,
+                Margin = new Thickness(0, 5, 0, 0)
             };
 
             Label innerLabel = new Label
@@ -228,32 +248,22 @@ namespace UchetPerevozki
             border.Child = innerLabel;
             return border;
         }
-    }
 
-    public class WorkerResponse
-    {
-        public int Id { get; set; }
-        public string name { get; set; }
-        public string surname { get; set; }
-        public string patronymic { get; set; }
-        public DateTime date_of_birthday { get; set; }
-        public string phone { get; set; }
-        public string address_residential { get; set; }
-        public string bank_account_number { get; set; }
-        public int role_id { get; set; }
-    }
+        private void OnEditButtonClick(WorkerResponse worker)
+        {
+            // Переход на экран редактирования; это может быть новое окно или пользовательский 
+            // Если вы находитесь в контексте окна или страницы, вы можете использовать:
+            // this.NavigationService.Navigate(editView);
+            // Или, если вы в окне, вы можете открыть новое окно следующим образом:
+            // editView.ShowDialog();
+            EditWorkersWindow editWindow = new EditWorkersWindow(worker);
+            editWindow.Show();
+        }
 
-    public class CarResponse
-    {
-        public int CarId { get; set; } // ID автомобиля
-        public string state_number { get; set; } // Госномер
-        public string model { get; set; } // Модель
-        public string stamp { get; set; } // Марка автомобиля
-    }
-
-    public class WorkerWithCars
-    {
-        public WorkerResponse Worker { get; set; }
-        public CarResponse Car { get; set; } // Структура была изменена с List на CarResponse
+        private void btnAddWorker(object sender, RoutedEventArgs e)
+        {
+            AddWorkersWindow addWorkersWindow = new AddWorkersWindow();
+            addWorkersWindow.Show();
+        }
     }
 }

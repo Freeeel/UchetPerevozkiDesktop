@@ -1,0 +1,64 @@
+﻿<Window x:Class="UchetPerevozki.Windows.EditWorkersWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:UchetPerevozki.Windows"
+        mc:Ignorable="d"
+        Title="EditWorkersWindow" Height="800" Width="900">
+    <Grid>
+        <StackPanel Margin="20">
+            <TextBlock Text="Редактирования информации о работнике" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24" FontWeight="Bold"/>
+          
+            <StackPanel Width="600" Margin="0 20 0 0">
+                
+                <TextBlock Text="ID" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5 0 0 0"/>
+                <Border Width="580" Height="32" CornerRadius="5" BorderThickness="1" BorderBrush="Black" Margin="0 3 0 0">
+                    <TextBox x:Name="IdTB"  BorderThickness="0" Width="570" Height="26" Padding="5" FontSize="14" />
+                </Border>
+
+                <TextBlock Text="Фамилия" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5 15 0 0"/>
+                <Border Width="580" Height="32" CornerRadius="5" BorderThickness="1" BorderBrush="Black" Margin="0 3 0 0">
+                    <TextBox Name="SurnameTB"  BorderThickness="0" Width="570" Height="26" />
+                </Border>
+
+
+                <TextBlock Text="Имя" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5 15 0 0"/>
+                <Border Width="580" Height="32" CornerRadius="5" BorderThickness="1" BorderBrush="Black" Margin="0 3 0 0">
+                    <TextBox Name="NameTB"  BorderThickness="0" Width="570" Height="26" />
+                </Border>
+
+                <TextBlock Text="Отчество" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5 15 0 0"/>
+                <Border Width="580" Height="32" CornerRadius="5" BorderThickness="1" BorderBrush="Black" Margin="0 3 0 0">
+                    <TextBox Name="PatronymicTB"  BorderThickness="0" Width="570" Height="26" />
+                </Border>
+
+                <TextBlock Text="Телефон" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5 15 0 0"/>
+                <Border Width="580" Height="32" CornerRadius="5" BorderThickness="1" BorderBrush="Black" Margin="0 3 0 0">
+                    <TextBox Name="PhoneTB"  BorderThickness="0" Width="570" Height="26" />
+                </Border>
+
+                <TextBlock Text="Адрес проживания" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5 15 0 0"/>
+                <Border Width="580" Height="32" CornerRadius="5" BorderThickness="1" BorderBrush="Black" Margin="0 3 0 0">
+                    <TextBox Name="AddressTB"  BorderThickness="0" Width="570" Height="26" />
+                </Border>
+
+                <TextBlock Text="Номер банковского счёта" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5 15 0 0"/>
+                <Border Width="580" Height="32" CornerRadius="5" BorderThickness="1" BorderBrush="Black" Margin="0 3 0 0">
+                    <TextBox Name="BankAccountNumberTB"  BorderThickness="0" Width="570" Height="26"/>
+                </Border>
+
+                <TextBlock Text="Логин" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5 15 0 0"/>
+                <Border Width="580" Height="32" CornerRadius="5" BorderThickness="1" BorderBrush="Black" Margin="0 3 0 0">
+                    <TextBox Name="LoginTB"  BorderThickness="0" Width="570" Height="26" />
+                </Border>
+
+                <TextBlock Text="Пароль" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5 15 0 0"/>
+                <Border Width="580" Height="32" CornerRadius="5" BorderThickness="1" BorderBrush="Black" Margin="0 3 0 0">
+                    <PasswordBox Name="PasswordPB" BorderThickness="0" Width="570" Height="26" />
+                </Border>
+            </StackPanel>
+            <Button Content="Сохранить" Click="SaveButton_Click" Margin="100,20,100,0"/>
+        </StackPanel>
+    </Grid>
+</Window>

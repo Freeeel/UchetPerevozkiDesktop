@@ -93,12 +93,29 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Response\CarResponse.cs" />
     <Compile Include="Response\ReportResponse.cs" />
     <Compile Include="Response\UserLogin.cs" />
     <Compile Include="Response\UserResponse.cs" />
+    <Compile Include="Response\WorkerResponse.cs" />
+    <Compile Include="Response\WorkerWithCars.cs" />
+    <Compile Include="Windows\AddWorkersWindow.xaml.cs">
+      <DependentUpon>AddWorkersWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\EditWorkersWindow.xaml.cs">
+      <DependentUpon>EditWorkersWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\WorkersWindow.xaml.cs">
       <DependentUpon>WorkersWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="Windows\AddWorkersWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\EditWorkersWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\HistoryReportsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -152,6 +169,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="icons\avaWork.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ipAddress.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
