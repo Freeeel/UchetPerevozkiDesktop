@@ -14,48 +14,48 @@
                 
                 <TextBlock Text="ID" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5 0 0 0"/>
                 <Border Width="580" Height="32" CornerRadius="5" BorderThickness="1" BorderBrush="Black" Margin="0 3 0 0">
-                    <TextBox x:Name="IdTB"  BorderThickness="0" Width="570" Height="26" Padding="5" FontSize="14" />
+                    <TextBox x:Name="IdTB"  BorderThickness="0" Width="570" Height="26" Padding="5" FontSize="14" IsReadOnly="True" />
                 </Border>
 
                 <TextBlock Text="Фамилия" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5 15 0 0"/>
                 <Border Width="580" Height="32" CornerRadius="5" BorderThickness="1" BorderBrush="Black" Margin="0 3 0 0">
-                    <TextBox Name="SurnameTB"  BorderThickness="0" Width="570" Height="26" />
+                    <TextBox Name="SurnameTB"  BorderThickness="0" Width="570" Height="26" Padding="5 3 5 4" FontSize="14" MaxLength="50" />
                 </Border>
 
 
                 <TextBlock Text="Имя" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5 15 0 0"/>
                 <Border Width="580" Height="32" CornerRadius="5" BorderThickness="1" BorderBrush="Black" Margin="0 3 0 0">
-                    <TextBox Name="NameTB"  BorderThickness="0" Width="570" Height="26" />
+                    <TextBox Name="NameTB"  BorderThickness="0" Width="570" Height="26" Padding="5 3 5 4" FontSize="14" MaxLength="50" />
                 </Border>
 
                 <TextBlock Text="Отчество" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5 15 0 0"/>
                 <Border Width="580" Height="32" CornerRadius="5" BorderThickness="1" BorderBrush="Black" Margin="0 3 0 0">
-                    <TextBox Name="PatronymicTB"  BorderThickness="0" Width="570" Height="26" />
+                    <TextBox Name="PatronymicTB"  BorderThickness="0" Width="570" Height="26" Padding="5 3 5 4" FontSize="14"  MaxLength="50"/>
                 </Border>
 
                 <TextBlock Text="Телефон" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5 15 0 0"/>
                 <Border Width="580" Height="32" CornerRadius="5" BorderThickness="1" BorderBrush="Black" Margin="0 3 0 0">
-                    <TextBox Name="PhoneTB"  BorderThickness="0" Width="570" Height="26" />
+                    <TextBox Name="PhoneTB"  BorderThickness="0" Width="570" Height="26" Padding="5 3 5 4" FontSize="14" MaxLength="12"/>
                 </Border>
 
                 <TextBlock Text="Адрес проживания" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5 15 0 0"/>
                 <Border Width="580" Height="32" CornerRadius="5" BorderThickness="1" BorderBrush="Black" Margin="0 3 0 0">
-                    <TextBox Name="AddressTB"  BorderThickness="0" Width="570" Height="26" />
+                    <TextBox Name="AddressTB"  BorderThickness="0" Width="570" Height="26" Padding="5 3 5 4" FontSize="14" MaxLength="100" />
                 </Border>
 
                 <TextBlock Text="Номер банковского счёта" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5 15 0 0"/>
                 <Border Width="580" Height="32" CornerRadius="5" BorderThickness="1" BorderBrush="Black" Margin="0 3 0 0">
-                    <TextBox Name="BankAccountNumberTB"  BorderThickness="0" Width="570" Height="26"/>
+                    <TextBox Name="BankAccountNumberTB"  BorderThickness="0" Width="570" Height="26" Padding="5 3 5 4" FontSize="14"/>
                 </Border>
 
                 <TextBlock Text="Логин" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5 15 0 0"/>
                 <Border Width="580" Height="32" CornerRadius="5" BorderThickness="1" BorderBrush="Black" Margin="0 3 0 0">
-                    <TextBox Name="LoginTB"  BorderThickness="0" Width="570" Height="26" />
+                    <TextBox Name="LoginTB"  BorderThickness="0" Width="570" Height="26"  MaxLength="50" Padding="5 3 5 4" FontSize="14"/>
                 </Border>
 
                 <TextBlock Text="Пароль" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5 15 0 0"/>
                 <Border Width="580" Height="32" CornerRadius="5" BorderThickness="1" BorderBrush="Black" Margin="0 3 0 0">
-                    <PasswordBox Name="PasswordPB" BorderThickness="0" Width="570" Height="26" />
+                    <PasswordBox Name="PasswordPB" BorderThickness="0" Width="570" Height="26"  MaxLength="50" Padding="5 3 5 4" FontSize="14" />
                 </Border>
             </StackPanel>
             <Button Content="Сохранить" Click="SaveButton_Click" Margin="100,20,100,0"/>

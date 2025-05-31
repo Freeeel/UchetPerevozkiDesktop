@@ -8,26 +8,11 @@
         Title="MainWindow" Height="700" Width="1380">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="230"/>
-            <!-- Боковая панель -->
             <ColumnDefinition Width="*"/>
             <!-- Основная область -->
         </Grid.ColumnDefinitions>
 
-        <!-- Боковая панель -->
-        <StackPanel Background="#4CAF50">
-            <Image Source="C:\Users\Дмитрий\Desktop\иконки\iconProfile.png" Width="120" Height="106" Margin="0,70,0,0"/>
-            <TextBlock Text="Войдите в профиль" FontSize="20" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,15,0,0" />
-            <Button Background="#00000000" BorderBrush="#00000000" BorderThickness="0" Width="230"   >
-                <Image Source="C:\Users\Дмитрий\Desktop\иконки\historyReports.png" Stretch="Fill" Margin="0,65,0,0" />
-            </Button>
-            <Button Background="#00000000" BorderBrush="#00000000" BorderThickness="0" Width="230"   >
-                <Image Source="C:\Users\Дмитрий\Desktop\иконки\personal.png" Stretch="Fill" Margin="0,20,0,0" />
-            </Button>
-            <Button Background="#00000000" BorderBrush="#00000000" BorderThickness="0" Width="230"   >
-                <Image Source="C:\Users\Дмитрий\Desktop\иконки\repairs.png" Stretch="Fill" Margin="0,20,0,0" />
-            </Button>
-        </StackPanel>
+
 
         <Grid Grid.Column="1"  HorizontalAlignment="Center" VerticalAlignment="Center">
             <Border Background="#484848" CornerRadius="10" Padding="20" Width="652" Height="510">

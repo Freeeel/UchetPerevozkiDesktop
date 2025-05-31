@@ -209,7 +209,9 @@
     <Resource Include="icons\avaWork.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="ipAddress.txt" />
+    <Resource Include="ipAddress.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

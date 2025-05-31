@@ -31,6 +31,8 @@ namespace UchetPerevozki
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
+                
+
                 var userLogin = new UserLogin
                 {
                     login = Login,
@@ -40,16 +42,24 @@ namespace UchetPerevozki
                 var json = JsonConvert.SerializeObject(userLogin);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                var response = await client.PostAsync("/login", content);
-
-                if (response.IsSuccessStatusCode)
+                try
                 {
-                    var responseData = await response.Content.ReadAsStringAsync(); 
-                    return JsonConvert.DeserializeObject<UserResponse>(responseData);
+                    var response = await client.PostAsync("/login", content);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var responseData = await response.Content.ReadAsStringAsync();
+                        return JsonConvert.DeserializeObject<UserResponse>(responseData);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Неверный логин или пароль", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return null;
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    throw new Exception($"Ошибка: {response.StatusCode}, {await response.Content.ReadAsStringAsync()}");
+                    MessageBox.Show($"Ошибка при подключении к серверу: {ex.Message}", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return null;
                 }
             }
         }
@@ -58,11 +68,28 @@ namespace UchetPerevozki
         {
             string Login = loginTextBox.Text;
             string Password = passwordTextBox.Password;
+
+            if (string.IsNullOrEmpty(Login))
+            {
+                MessageBox.Show("Пожалуйста, заполните поле логин!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return; // Прерываем выполнение метода, если поля не заполнены
+            }
+            if (string.IsNullOrEmpty(Password))
+            {
+                MessageBox.Show("Пожалуйста, заполните поле пароль!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return; // Прерываем выполнение метода, если поля не заполнены
+            }
+
+
+            int userId = 0; // Инициализируем userId значением по умолчанию
             var userResponse = await LoginAsync(Login, Password);
-            int userId = userResponse.Id;
-            HistoryReportsWindow historyReportsWindow = new HistoryReportsWindow(userId);
-            historyReportsWindow.Show();
-            this.Close();
+            if (userResponse != null)
+            {
+                userId = userResponse.Id; // Получаем userId из ответа
+                HistoryReportsWindow historyReportsWindow = new HistoryReportsWindow(userId);
+                historyReportsWindow.Show();
+                this.Close();
+            }
         }
     }
 }

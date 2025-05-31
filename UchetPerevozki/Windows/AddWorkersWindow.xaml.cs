@@ -30,8 +30,8 @@ namespace UchetPerevozki.Windows
                 client.BaseAddress = new Uri(baseAddress);
                 try
                 {
-                    var response = await client.GetAsync($"/car_parks"); // Получаем список машин
-                    response.EnsureSuccessStatusCode(); // Выбрасываем исключение в случае неуспешного 
+                    var response = await client.GetAsync($"/car_parks");
+                    response.EnsureSuccessStatusCode();
                     var responseData = await response.Content.ReadAsStringAsync();
                     List<CarResponse> carResponses = JsonSerializer.Deserialize<List<CarResponse>>(responseData);
                     // Заполняем ComboBox данными
@@ -55,13 +55,45 @@ namespace UchetPerevozki.Windows
                 }
             }
         }
+        private void DateOfBirthDatePicker_CalendarClosed(object sender, RoutedEventArgs e)
+        {
+            if (DateOfBirthDatePicker.SelectedDate.HasValue)
+            {
+                DateOfBirthDatePicker.Text = DateOfBirthDatePicker.SelectedDate.Value.ToString("yyyy-MM-dd");
+            }
+        }
         private async void SaveButton_Click(object sender, RoutedEventArgs e)
         {
+            // Получаем значения из полей
+            string surname = SurnameTextBox.Text;
+            string name = NameTextBox.Text;
+            string patronymic = PatronymicTextBox.Text;
+            string dateOfBirth = DateOfBirthDatePicker.SelectedDate?.ToString("yyyy-MM-dd"); // Получаем дату из DatePicker
+            string phone = PhoneTextBox.Text;
+            string login = LoginTextBox.Text;
+            string password = PasswordTextBox.Text;
+            string addressResidential = AddressResidentialTextBox.Text;
+            string bankAccountNumberText = BankAccountNumberTextBox.Text;
+            string selectedCar = CarBrandTextBox.SelectedItem?.ToString(); // Получаем выбранный автомобиль
+            // Проверка на заполненность полей
+            if (string.IsNullOrEmpty(surname) || string.IsNullOrEmpty(name) ||
+                string.IsNullOrEmpty(patronymic) || string.IsNullOrEmpty(dateOfBirth) ||
+                string.IsNullOrEmpty(phone) || string.IsNullOrEmpty(login) ||
+                string.IsNullOrEmpty(password) || string.IsNullOrEmpty(addressResidential) ||
+                string.IsNullOrEmpty(bankAccountNumberText) || string.IsNullOrEmpty(selectedCar))
+            {
+                MessageBox.Show("Пожалуйста, заполните все поля!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return; // Прерываем выполнение метода, если поля не заполнены
+            }
+            // Проверка на корректность введенного номера банковского счета
+            if (!int.TryParse(bankAccountNumberText, out int bank_account_number))
+            {
+                MessageBox.Show("Пожалуйста, введите корректный номер банковского счета!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return; // Прерываем выполнение метода, если номер банковского счета некорректен
+            }
             // Получаем выбранный автомобиль из ComboBox
             if (CarBrandTextBox.SelectedItem != null)
             {
-                string selectedCar = CarBrandTextBox.SelectedItem.ToString();
-                Console.WriteLine($"Combo: {selectedCar}");
                 // Предполагаем, что displayText в ComboBox имеет формат "Model - Stamp - State_number"
                 string[] carParts = selectedCar.Split(new string[] { " - " }, StringSplitOptions.None);
                 if (carParts.Length == 3)
@@ -76,15 +108,15 @@ namespace UchetPerevozki.Windows
                         // Создаем объект с данными пользователя
                         var userData = new
                         {
-                            surname = SurnameTextBox.Text,
-                            name = NameTextBox.Text,
-                            patronymic = PatronymicTextBox.Text,
-                            date_of_birthday = DateOfBirthTextBox.Text,
-                            phone = PhoneTextBox.Text,
-                            login = LoginTextBox.Text,
-                            password = PasswordTextBox.Text,
-                            address_residential = "unknown",  // или любое другое значение по умолчанию
-                            bank_account_number = 0, //
+                            surname,
+                            name,
+                            patronymic,
+                            date_of_birthday = dateOfBirth,
+                            phone,
+                            login,
+                            password,
+                            address_residential = addressResidential,
+                            bank_account_number = bank_account_number,
                             car_id = carId
                         };
                         Console.WriteLine($"Данные для API: {JsonSerializer.Serialize(userData)}");
@@ -93,7 +125,6 @@ namespace UchetPerevozki.Windows
                         if (success)
                         {
                             MessageBox.Show("Работник успешно добавлен!");
-                            DialogResult = true;
                             this.Close(); // Закрываем окно после успешного добавления
                         }
                         else
@@ -149,33 +180,26 @@ namespace UchetPerevozki.Windows
             using (HttpClient client = new HttpClient())
             {
                 client.BaseAddress = new Uri(baseAddress);
-
                 try
                 {
                     // Логируем параметры, которые передаются в API
                     Console.WriteLine($"API Request: /car_parks?model={model}&stamp={stamp}&state_number={stateNumber}");
-
                     // Запрос к API для получения car_id по model, stamp и stateNumber
                     string apiUrl = $"/car_parks?model={model}&stamp={stamp}&state_number={stateNumber}";
                     var response = await client.GetAsync(apiUrl);
                     response.EnsureSuccessStatusCode();
-
                     string responseData = await response.Content.ReadAsStringAsync();
-
                     // Логируем ответ от API для отладки
                     Console.WriteLine($"API Response: {responseData}");
-
                     // Проверяем, что ответ не пустой
                     if (string.IsNullOrEmpty(responseData))
                     {
                         Console.WriteLine("API вернул пустой ответ.");
                         return 0;
                     }
-
                     //  Предполагаем, что API возвращает JSON с полем "id"
                     JsonDocument jsonDocument = JsonDocument.Parse(responseData);
                     JsonElement root = jsonDocument.RootElement;
-
                     //  Если API возвращает массив объектов
                     if (root.ValueKind == JsonValueKind.Array)
                     {
@@ -197,7 +221,6 @@ namespace UchetPerevozki.Windows
                             }
                         }
                     }
-
                     Console.WriteLine("Не удалось найти car_id для выбранного автомобиля.");
                     return 0;
                 }
@@ -213,6 +236,5 @@ namespace UchetPerevozki.Windows
                 }
             }
         }
-
     }
 }

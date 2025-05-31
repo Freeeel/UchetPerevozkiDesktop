@@ -23,7 +23,7 @@ namespace UchetPerevozki
     public partial class HistoryReportsWindow : Window
     {
         private int _userId; // Это будет ID пользователя
-
+        private UserResponse _userData;
         public HistoryReportsWindow(int userId)
         {
             InitializeComponent();
@@ -34,8 +34,9 @@ namespace UchetPerevozki
         {
             try
             {
-                UserResponse userData = await GetUserDataAsync(_userId);
-                userNameTextBlock.Text = $"{userData.Name} {userData.Surname}";
+                _userData = await GetUserDataAsync(_userId);
+                
+                userNameTextBlock.Text = $"{_userData.Name} {_userData.Surname}";
                 var reports = await GetReportsAsync();
 
                 // Создаем WrapPanel с карточками
@@ -162,9 +163,11 @@ namespace UchetPerevozki
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            WorkersWindow workersWindow = new WorkersWindow();
+            WorkersWindow workersWindow = new WorkersWindow(_userData);
             workersWindow.Show();
             this.Close();
         }
+
+
     }
 }

@@ -4,6 +4,65 @@
              xmlns:local="clr-namespace:UchetPerevozki"
              StartupUri="Windows/MainWindow.xaml">
     <Application.Resources>
-         
+        <Style x:Key="DatePickerButtonStyle" TargetType="ToggleButton">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Border Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="3"
+                        Padding="5">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#DDDDDD"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="#CCCCCC"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Background" Value="#EEEEEE"/>
+        <Setter Property="BorderBrush" Value="#BBBBBB"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+        <Style x:Key="RoundedDatePickerStyle" TargetType="DatePicker">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="DatePicker">
+                        <Grid>
+                            <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="5"/>
+                            <DockPanel>
+                                <ToggleButton x:Name="PART_Button"
+                                        Style="{StaticResource DatePickerButtonStyle}" />
+                                <TextBox x:Name="PART_TextBox"
+                                 BorderThickness="0"
+                                 Padding="5"
+                                 Background="Transparent"
+                                 HorizontalContentAlignment="Left"
+                                 VerticalContentAlignment="Center"/>
+                                <Popup x:Name="PART_Popup" AllowsTransparency="True"
+                               Placement="Bottom" IsOpen="{Binding IsChecked, ElementName=PART_Button}">
+                                    <Calendar x:Name="PART_Calendar"/>
+                                </Popup>
+                            </DockPanel>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Application.Resources>
 </Application>

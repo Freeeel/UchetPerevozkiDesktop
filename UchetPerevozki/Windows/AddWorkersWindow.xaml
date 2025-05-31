@@ -72,36 +72,36 @@
                 </Grid.ColumnDefinitions>
                 <!-- Заголовок -->
                 <TextBlock Text="Добавление нового водителя" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Grid.Row="0" Grid.ColumnSpan="2" Margin="0,0,0,20"/>
-                <!-- Фамилия -->
+
                 <TextBlock Text="Фамилия" Grid.Row="1" Margin="5"/>
-                <TextBox x:Name="SurnameTextBox" Grid.Row="2" Margin="5" Text="" Style="{StaticResource RoundedTextBoxStyle}"/>
-                <!-- Логин -->
+                <TextBox x:Name="SurnameTextBox" Grid.Row="2" Margin="5" Text="" Style="{StaticResource RoundedTextBoxStyle}" MaxLength="50"/>
+
                 <TextBlock Text="Логин" Grid.Row="1" Grid.Column="1" Margin="5"/>
-                <TextBox x:Name="LoginTextBox" Grid.Row="2" Grid.Column="1" Margin="5" Text="" Style="{StaticResource RoundedTextBoxStyle}"/>
-                <!-- Имя -->
+                <TextBox x:Name="LoginTextBox" Grid.Row="2" Grid.Column="1" Margin="5" Text="" Style="{StaticResource RoundedTextBoxStyle}"  MaxLength="50"/>
+                
                 <TextBlock Text="Имя" Grid.Row="3" Margin="5"/>
-                <TextBox x:Name="NameTextBox" Grid.Row="4" Margin="5" Text="" Style="{StaticResource RoundedTextBoxStyle}"/>
-                <!-- Пароль -->
+                <TextBox x:Name="NameTextBox" Grid.Row="4" Margin="5" Text="" Style="{StaticResource RoundedTextBoxStyle}"  MaxLength="50"/>
+
                 <TextBlock Text="Пароль" Grid.Row="3" Grid.Column="1" Margin="5"/>
-                <TextBox x:Name="PasswordTextBox" Grid.Row="4" Grid.Column="1" Margin="5" Text="Введите пароль" Style="{StaticResource RoundedTextBoxStyle}"/>
-                <!-- Отчество -->
+                <TextBox x:Name="PasswordTextBox" Grid.Row="4" Grid.Column="1" Margin="5"  Style="{StaticResource RoundedTextBoxStyle}"  MaxLength="50"/>
+
                 <TextBlock Text="Отчество" Grid.Row="5" Margin="5"/>
-                <TextBox x:Name="PatronymicTextBox" Grid.Row="6" Margin="5" Text="" Style="{StaticResource RoundedTextBoxStyle}"/>
-                <!-- Марка ТС -->
-                <TextBlock Text="Марка ТС" Grid.Row="5" Grid.Column="1" Margin="5"/>
-                <ComboBox x:Name="CarBrandTextBox" Grid.Row="6" Grid.Column="1" Margin="5"/>
-                <!-- Дата рождения -->
+                <TextBox x:Name="PatronymicTextBox" Grid.Row="6" Margin="5" Text="" Style="{StaticResource RoundedTextBoxStyle}"  MaxLength="50"/>
+
                 <TextBlock Text="Дата рождения" Grid.Row="7" Margin="5"/>
-                <TextBox x:Name="DateOfBirthTextBox" Grid.Row="8" Margin="5" Text="" Style="{StaticResource RoundedTextBoxStyle}" />
-                <!-- Модель ТС -->
-                <TextBlock Text="Модель ТС" Grid.Row="7" Grid.Column="1" Margin="5"/>
-                <ComboBox x:Name="CarModelTextBox" Grid.Row="8" Grid.Column="1" Margin="5" />
-                <!-- Телефон -->
+                <DatePicker x:Name="DateOfBirthDatePicker" Grid.Row="8" Margin="5" SelectedDateFormat="Short" DisplayDateStart="1900-01-01" CalendarClosed="DateOfBirthDatePicker_CalendarClosed"/>
+
                 <TextBlock Text="Телефон" Grid.Row="9" Margin="5"/>
-                <TextBox x:Name="PhoneTextBox" Grid.Row="10" Margin="5" Text="" Style="{StaticResource RoundedTextBoxStyle}"/>
-                <!-- Гос Номер ТС -->
-                <TextBlock Text="Гос Номер ТС" Grid.Row="9" Grid.Column="1" Margin="5"/>
-                <ComboBox x:Name="GosNumberTextBox" Grid.Row="10" Grid.Column="1" Margin="5" Text=""/>
+                <TextBox x:Name="PhoneTextBox" Grid.Row="10" Margin="5" Text="" Style="{StaticResource RoundedTextBoxStyle}"  MaxLength="12"/>
+
+                <TextBlock Text="Адрес проживания" Grid.Row="5"  Grid.Column="1" Margin="5"/>
+                <TextBox x:Name="AddressResidentialTextBox" Grid.Row="6" Grid.Column="1" Margin="5" Text="" Style="{StaticResource RoundedTextBoxStyle}"  MaxLength="100"/>
+                
+                <TextBlock Text="Номер банковского счёта" Grid.Row="7"  Grid.Column="1" Margin="5"/>
+                <TextBox x:Name="BankAccountNumberTextBox" Grid.Row="8" Grid.Column="1" Margin="5" Text="" Style="{StaticResource RoundedTextBoxStyle}"  MaxLength="20"/>
+
+                <TextBlock Text="Транспортное средство" Grid.Row="9" Grid.Column="1" Margin="5"/>
+                <ComboBox x:Name="CarBrandTextBox" Grid.Row="10" Grid.Column="1" Margin="5"/>
             </Grid>
         </Border>
         <!-- Кнопки -->

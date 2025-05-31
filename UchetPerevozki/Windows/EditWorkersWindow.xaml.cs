@@ -43,56 +43,68 @@ namespace UchetPerevozki.Windows
         private async void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             // Получаем обновленные данные из формы
+            string name = NameTB.Text;
+            string surname = SurnameTB.Text;
+            string patronymic = PatronymicTB.Text;
+            string phone = PhoneTB.Text;
+            string address_residential = AddressTB.Text;
+            string login = LoginTB.Text;
+            string password = PasswordPB.Password;
+            string bankAccountNumberText = BankAccountNumberTB.Text;
+
+            // Проверка на заполненность полей
+            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(surname) ||
+                string.IsNullOrEmpty(patronymic) || string.IsNullOrEmpty(phone) ||
+                string.IsNullOrEmpty(address_residential) || string.IsNullOrEmpty(login) ||
+                string.IsNullOrEmpty(password) || string.IsNullOrEmpty(bankAccountNumberText))
+            {
+                MessageBox.Show("Пожалуйста, заполните все поля!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return; // Прерываем выполнение метода, если поля не заполнены
+            }
+            // Проверка на корректность введенного номера банковского счета
+            if (!int.TryParse(bankAccountNumberText, out int bank_account_number))
+            {
+                MessageBox.Show("Пожалуйста, введите корректный номер банковского счета!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return; // Прерываем выполнение метода, если номер банковского счета некорректен
+            }
             var updatedData = new
             {
-                name = NameTB.Text,
-                surname = SurnameTB.Text,
-                patronymic = PatronymicTB.Text,
-                phone = PhoneTB.Text,
-                address_residential = AddressTB.Text,
-                bank_account_number = int.Parse(BankAccountNumberTB.Text),
-                login = LoginTB.Text,
-                password = PasswordPB.Password
+                name,
+                surname,
+                patronymic,
+                phone,
+                address_residential,
+                bank_account_number,
+                login,
+                password
             };
-
             // Вызываем API для обновления данных работника
             bool success = await UpdateWorkerAsync(_workerId, updatedData);
-
             if (success)
             {
-                MessageBox.Show("Данные работника успешно обновлены!");
-                DialogResult = true; // Устанавливаем DialogResult в true, если обновление прошло успешно
-                
+                MessageBox.Show("Данные работника успешно обновлены!", "Успешно!", MessageBoxButton.OK, MessageBoxImage.Information);
+                this.Close();
             }
             else
             {
-                MessageBox.Show("Не удалось обновить данные работника.");
+                MessageBox.Show("Не удалось обновить данные работника", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
         private async Task<bool> UpdateWorkerAsync(int workerId, object updatedData)
         {
             string baseAddress = File.ReadAllText("C:\\Users\\Дмитрий\\source\\repos\\UchetPerevozki\\UchetPerevozki\\ipAddress.txt").Trim();
             using (HttpClient client = new HttpClient())
             {
                 client.BaseAddress = new Uri(baseAddress);
-
-                // Сериализуем обновленные данные в JSON
                 string json = JsonConvert.SerializeObject(updatedData);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-                // Отправляем PUT-запрос
                 HttpResponseMessage response = await client.PutAsync($"/users/{workerId}", content);
-
-                // Проверяем статус ответа
                 if (response.IsSuccessStatusCode)
                 {
                     return true;
                 }
                 else
                 {
-                    // Логируем ошибку для отладки
-                    Console.WriteLine($"Ошибка при обновлении работника: {response.StatusCode}");
                     return false;
                 }
             }

@@ -17,6 +17,8 @@ using System.Windows.Shapes;
 using UchetPerevozki.Response;
 using UchetPerevozki.Windows;
 
+
+
 namespace UchetPerevozki
 {
     /// <summary>
@@ -24,10 +26,12 @@ namespace UchetPerevozki
     /// </summary>
     public partial class WorkersWindow : Window
     {
-        public WorkersWindow()
+        private UserResponse _userData;
+        public WorkersWindow(UserResponse userData)
         {
             InitializeComponent();
             LoadData();
+            _userData = userData;
         }
         private async void LoadData()
         {
@@ -69,7 +73,7 @@ namespace UchetPerevozki
             {
                 string baseAddress = File.ReadAllText("C:\\Users\\Дмитрий\\source\\repos\\UchetPerevozki\\UchetPerevozki\\ipAddress.txt").Trim();
                 client.BaseAddress = new Uri(baseAddress);
-                var response = await client.GetAsync($"/user/{userId}/car"); // Получаем машину работника
+                var response = await client.GetAsync($"/user/{userId}/car");
                 if (response.IsSuccessStatusCode)
                 {
                     var responseData = await response.Content.ReadAsStringAsync();
@@ -251,11 +255,7 @@ namespace UchetPerevozki
 
         private void OnEditButtonClick(WorkerResponse worker)
         {
-            // Переход на экран редактирования; это может быть новое окно или пользовательский 
-            // Если вы находитесь в контексте окна или страницы, вы можете использовать:
-            // this.NavigationService.Navigate(editView);
-            // Или, если вы в окне, вы можете открыть новое окно следующим образом:
-            // editView.ShowDialog();
+
             EditWorkersWindow editWindow = new EditWorkersWindow(worker);
             editWindow.Show();
         }
@@ -264,6 +264,13 @@ namespace UchetPerevozki
         {
             AddWorkersWindow addWorkersWindow = new AddWorkersWindow();
             addWorkersWindow.Show();
+        }
+
+        private void BtnHistoryOpenWindow(object sender, RoutedEventArgs e)
+        {
+            HistoryReportsWindow historyReportsWindow = new HistoryReportsWindow(_userData.Id);
+            historyReportsWindow.Show();
+            this.Close();
         }
     }
 }
