@@ -1,5 +1,4 @@
-﻿using System.Text.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
@@ -7,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using UchetPerevozki.Response;
-using Newtonsoft.Json.Serialization;
+using System.Text.Json;
 
 namespace UchetPerevozki.Windows
 {
@@ -21,7 +20,6 @@ namespace UchetPerevozki.Windows
             InitializeComponent();
             LoadCarData();
         }
-
         private async Task LoadCarData()
         {
             using (var client = new HttpClient())
@@ -33,7 +31,11 @@ namespace UchetPerevozki.Windows
                     var response = await client.GetAsync($"/car_parks");
                     response.EnsureSuccessStatusCode();
                     var responseData = await response.Content.ReadAsStringAsync();
-                    List<CarResponse> carResponses = JsonSerializer.Deserialize<List<CarResponse>>(responseData);
+                    // Используем System.Text.Json для десериализации
+                    List<CarResponse> carResponses = JsonSerializer.Deserialize<List<CarResponse>>(responseData, new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true // Учитываем регистр свойств при десериализации
+                    });
                     // Заполняем ComboBox данными
                     foreach (var car in carResponses)
                     {
@@ -45,7 +47,8 @@ namespace UchetPerevozki.Windows
                 {
                     MessageBox.Show($"Ошибка при получении списка машин: {ex.Message}");
                 }
-                catch (JsonException ex)
+                // Теперь используем System.Text.Json.JsonException
+                catch (System.Text.Json.JsonException ex)
                 {
                     MessageBox.Show($"Ошибка при десериализации JSON: {ex.Message}");
                 }
@@ -119,6 +122,7 @@ namespace UchetPerevozki.Windows
                             bank_account_number = bank_account_number,
                             car_id = carId
                         };
+                        // Используем System.Text.Json для сериализации
                         Console.WriteLine($"Данные для API: {JsonSerializer.Serialize(userData)}");
                         // Вызываем API для добавления нового работника
                         bool success = await AddWorkerAsync(userData);
@@ -153,8 +157,8 @@ namespace UchetPerevozki.Windows
             using (HttpClient client = new HttpClient())
             {
                 client.BaseAddress = new Uri(baseAddress);
-                // Сериализуем данные в JSON
-                string json = JsonSerializer.Serialize(userData); // Используем JsonSerializer.Serialize
+                // Используем System.Text.Json для сериализации
+                string json = JsonSerializer.Serialize(userData);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
                 // Отправляем POST-запрос
                 HttpResponseMessage response = await client.PostAsync("/users/", content);
@@ -173,7 +177,7 @@ namespace UchetPerevozki.Windows
                 }
             }
         }
-        // Добавляем метод для получения car_id из API
+        // Метод для получения car_id из API
         private async Task<int> GetCarIdFromAPI(string model, string stamp, string stateNumber)
         {
             string baseAddress = File.ReadAllText("C:\\Users\\Дмитрий\\source\\repos\\UchetPerevozki\\UchetPerevozki\\ipAddress.txt").Trim();
@@ -185,7 +189,8 @@ namespace UchetPerevozki.Windows
                     // Логируем параметры, которые передаются в API
                     Console.WriteLine($"API Request: /car_parks?model={model}&stamp={stamp}&state_number={stateNumber}");
                     // Запрос к API для получения car_id по model, stamp и stateNumber
-                    string apiUrl = $"/car_parks?model={model}&stamp={stamp}&state_number={stateNumber}";
+                    // Возможно, вам нужно URL-кодировать параметры модели, марки и номера
+                    string apiUrl = $"/car_parks?model={Uri.EscapeDataString(model)}&stamp={Uri.EscapeDataString(stamp)}&state_number={Uri.EscapeDataString(stateNumber)}";
                     var response = await client.GetAsync(apiUrl);
                     response.EnsureSuccessStatusCode();
                     string responseData = await response.Content.ReadAsStringAsync();
@@ -197,10 +202,10 @@ namespace UchetPerevozki.Windows
                         Console.WriteLine("API вернул пустой ответ.");
                         return 0;
                     }
-                    //  Предполагаем, что API возвращает JSON с полем "id"
+                    // Используем System.Text.Json для разбора JSON
                     JsonDocument jsonDocument = JsonDocument.Parse(responseData);
                     JsonElement root = jsonDocument.RootElement;
-                    //  Если API возвращает массив объектов
+                    // Если API возвращает массив объектов
                     if (root.ValueKind == JsonValueKind.Array)
                     {
                         foreach (JsonElement element in root.EnumerateArray())
@@ -221,17 +226,36 @@ namespace UchetPerevozki.Windows
                             }
                         }
                     }
+                    // Если API возвращает один объект (в зависимости от реализации вашего API)
+                    else if (root.ValueKind == JsonValueKind.Object)
+                    {
+                        if (root.TryGetProperty("model", out JsonElement modelElement) &&
+                            root.TryGetProperty("stamp", out JsonElement stampElement) &&
+                            root.TryGetProperty("state_number", out JsonElement stateNumberElement))
+                        {
+                            if (modelElement.GetString() == model &&
+                                stampElement.GetString() == stamp &&
+                                stateNumberElement.GetString() == stateNumber)
+                            {
+                                if (root.TryGetProperty("id", out JsonElement idElement))
+                                {
+                                    return idElement.GetInt32();
+                                }
+                            }
+                        }
+                    }
                     Console.WriteLine("Не удалось найти car_id для выбранного автомобиля.");
+                    return 0;
+                }
+                // Теперь используем System.Text.Json.JsonException
+                catch (System.Text.Json.JsonException ex)
+                {
+                    Console.WriteLine($"Ошибка при разборе JSON: {ex.Message}");
                     return 0;
                 }
                 catch (HttpRequestException ex)
                 {
                     Console.WriteLine($"Ошибка при получении car_id: {ex.Message}");
-                    return 0;
-                }
-                catch (JsonException ex)
-                {
-                    Console.WriteLine($"Ошибка при разборе JSON: {ex.Message}");
                     return 0;
                 }
             }

@@ -14,6 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using UchetPerevozki.Windows;
 
 namespace UchetPerevozki
 {
@@ -161,13 +162,20 @@ namespace UchetPerevozki
             return card;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+
+
+        private void RepairsButton_Click(object sender, RoutedEventArgs e)
+        {
+            RepairWindow repairWindow = new RepairWindow();
+            repairWindow.Show();
+            this.Close();
+        }
+
+        private void WorkersButton_Click(object sender, RoutedEventArgs e)
         {
             WorkersWindow workersWindow = new WorkersWindow(_userData);
             workersWindow.Show();
             this.Close();
         }
-
-
     }
 }

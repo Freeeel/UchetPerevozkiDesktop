@@ -5,6 +5,50 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:UchetPerevozki.Windows"
         mc:Ignorable="d"
-        Title="RepairWindow" Height="476" Width="771">
-    
+        Title="RepairWindow" Height="700" Width="1380">
+
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="70"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="230"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Боковая панель -->
+        <StackPanel Background="#4CAF50" Grid.RowSpan="2">
+            <Image Source="C:\Users\Дмитрий\Desktop\иконки\iconProfile.png" Width="120" Height="106" Margin="0,70,0,0"/>
+            <TextBlock x:Name="userNameTextBlock" Text="" FontSize="20" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,15,0,0" />
+
+        </StackPanel>
+
+        <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Margin="5">
+            <RadioButton Content="Все заявки" IsChecked="True" GroupName="StatusFilter" Checked="StatusFilter_Checked"/>
+            <RadioButton Content="Активные" GroupName="StatusFilter" Margin="10,0,0,0" Checked="StatusFilter_Checked"/>
+            <RadioButton Content="Выполненные" GroupName="StatusFilter" Margin="10,0,0,0" Checked="StatusFilter_Checked"/>
+        </StackPanel>
+
+        <DataGrid Name="RepairsDataGrid" Grid.Column="1" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True" Grid.RowSpan="2" FontSize="24">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Width="40" Binding="{Binding Id}"/>
+                <DataGridTextColumn Header="Описание" Width="*"  Binding="{Binding description_breakdown}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="TextWrapping" Value="Wrap"/>
+                            <!-- Включаем перенос текста -->
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                            <!-- Выравнивание текста по центру ячейки -->
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Дата и время" Width="*" Binding="{Binding date_and_time_repair}"/>
+                <DataGridTextColumn Header="Статус ID" Width="*" Binding="{Binding status_text}"/>
+                <DataGridTextColumn Header="Имя пользователя" Width="*" Binding="{Binding user_name}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+
 </Window>
