@@ -132,6 +132,7 @@
     <Compile Include="Response\CarResponse.cs" />
     <Compile Include="Response\RepairWithUserName.cs" />
     <Compile Include="Response\ReportResponse.cs" />
+    <Compile Include="Response\StatusResponse.cs" />
     <Compile Include="Response\UserLogin.cs" />
     <Compile Include="Response\UserResponse.cs" />
     <Compile Include="Response\WorkerResponse.cs" />
@@ -141,6 +142,9 @@
     </Compile>
     <Compile Include="Windows\EditWorkersWindow.xaml.cs">
       <DependentUpon>EditWorkersWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\RepairDetailsWindow.xaml.cs">
+      <DependentUpon>RepairDetailsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\RepairWindow.xaml.cs">
       <DependentUpon>RepairWindow.xaml</DependentUpon>
@@ -175,6 +179,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Windows\RepairDetailsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\RepairWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

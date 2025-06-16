@@ -1,0 +1,41 @@
+﻿<Window x:Class="UchetPerevozki.Windows.RepairDetailsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:UchetPerevozki.Windows"
+        mc:Ignorable="d"
+        Title="RepairDetailsWindow" Height="450" Width="800">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="ID:" FontWeight="Bold" Margin="0,5,5,5"/>
+        <TextBlock Grid.Row="0" Grid.Column="1" x:Name="IdTextBlock" Margin="0,5,5,5"/>
+        
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="Описание:" FontWeight="Bold" Margin="0,5,5,5"/>
+        <TextBlock Grid.Row="1" Grid.Column="1" x:Name="DescriptionTextBlock" TextWrapping="Wrap" Margin="0,5,5,5"/>
+        <!-- Добавлен x:Name -->
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="Дата и время:" FontWeight="Bold" Margin="0,5,5,5"/>
+        <TextBlock Grid.Row="2" Grid.Column="1" x:Name="DateTimeTextBlock" Margin="0,5,5,5"/>
+
+        <TextBlock Grid.Row="4" Grid.Column="0" Text="Пользователь:" FontWeight="Bold" Margin="0,5,5,5"/>
+        <TextBlock Grid.Row="4" Grid.Column="1" x:Name="UserNameTextBlock" Margin="0,5,5,5"/>
+
+        <TextBlock Grid.Row="5" Grid.Column="0" Text="Статус:" FontWeight="Bold" Margin="0,5,5,5"/>
+        <TextBlock Grid.Row="5" Grid.Column="1" x:Name="StatusTextBox" Margin="0,5,5,5"/>
+
+        <Button Name="CompleteRepairButton" Grid.Row="7" Grid.ColumnSpan="2" Content="Сохранить" HorizontalAlignment="Right" Margin="0,10,5,5" Click="CompleteRepairButton_Click" />
+    </Grid>
+</Window>

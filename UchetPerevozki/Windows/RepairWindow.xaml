@@ -31,7 +31,7 @@
             <RadioButton Content="Выполненные" GroupName="StatusFilter" Margin="10,0,0,0" Checked="StatusFilter_Checked"/>
         </StackPanel>
 
-        <DataGrid Name="RepairsDataGrid" Grid.Column="1" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True" Grid.RowSpan="2" FontSize="24">
+        <DataGrid Name="RepairsDataGrid" Grid.Column="1" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True" Grid.RowSpan="2" FontSize="24" MouseDoubleClick="RepairsDataGrid_MouseDoubleClick">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Width="40" Binding="{Binding Id}"/>
                 <DataGridTextColumn Header="Описание" Width="*"  Binding="{Binding description_breakdown}">

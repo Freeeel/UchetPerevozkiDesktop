@@ -150,5 +150,22 @@ namespace UchetPerevozki.Windows
             }
             return null;
         }
+
+        private void RepairsDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (RepairsDataGrid.SelectedItem != null)
+            {
+                // Получаем выбранный объект данных
+                if (RepairsDataGrid.SelectedItem is RepairWithUserName selectedRepair)
+                {
+                    // Создаем новое окно для отображения деталей
+                    // Предполагается, что у вас есть окно с именем RepairDetailsWindow
+                    RepairDetailsWindow detailsWindow = new RepairDetailsWindow(selectedRepair);
+                    // Отображаем новое окно
+                    detailsWindow.ShowDialog(); // ShowDialog блокирует текущее окно до закрытия нового
+                                                // Или detailsWindow.Show(); // Show не блокирует текущее окно
+                }
+            }
+        }
     }
 }
