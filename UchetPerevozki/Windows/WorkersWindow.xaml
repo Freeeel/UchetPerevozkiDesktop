@@ -5,11 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:UchetPerevozki"
         mc:Ignorable="d"
-        Title="WorkersWindow" Height="700" Width="1380">
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        Title="Рабочий персонал" Height="700" Width="1380">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="154*"/>
-            <RowDefinition Height="17*"/>
+            <RowDefinition Height="317*"/>
+            <RowDefinition Height="25*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="230"/>
@@ -19,60 +21,51 @@
         <!-- Боковая панель -->
         <StackPanel Background="#4CAF50" Grid.RowSpan="2">
             <Image Source="C:\Users\Дмитрий\Desktop\иконки\iconProfile.png" Width="120" Height="106" Margin="0,70,0,0"/>
-            <TextBlock x:Name="userNameTextBlock" Text="" FontSize="20" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,15,0,0" />
+            <TextBlock Name="userNameTextBlock" Text="" FontSize="20" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,15,0,0" />
 
+            <Button Name="HistoryReportsButton" Background="#00000000" BorderBrush="#00000000" BorderThickness="0" Width="230" Margin="0,65,0,0" Click="HistoryReportsButton_Click">
+                <Image Source="/icons/historyReports.png" Stretch="Fill" />
 
-            <Button Background="#00000000" BorderBrush="#00000000" BorderThickness="0" Width="230" Margin="0,65,0,0" Click="BtnHistoryOpenWindow">
-                <Image Source="C:\Users\Дмитрий\Desktop\иконки\historyReports.png" Stretch="Fill"  />
             </Button>
 
-            <Button Background="#00000000" BorderBrush="#00000000" BorderThickness="0" Width="230" Margin="0,20,0,0" >
-                <Image Source="C:\Users\Дмитрий\Desktop\иконки\workersActive.png" Stretch="Fill" />
+            <Button Name="WorkersButton" Background="#00000000" BorderBrush="#00000000" BorderThickness="0" Width="230" Margin="0,20,0,0"  >
+                <Image Source="/icons/workersActive.png" Stretch="Fill" />
             </Button>
 
-            <Button Background="#00000000" BorderBrush="#00000000" BorderThickness="0" Width="230" Margin="0,20,0,0">
-                <Image Source="C:\Users\Дмитрий\Desktop\иконки\repairs.png" Stretch="Fill"  />
+            <Button Name="RepairsButton" Background="#00000000" BorderBrush="#00000000" BorderThickness="0" Width="230" Margin="0,20,0,0" Click="RepairsButton_Click">
+                <Image Source="/icons/repairs.png"  Stretch="Fill"/>
             </Button>
         </StackPanel>
 
-        <!-- Основная область -->
-        <Grid Grid.Column="1" Margin="10,10,10,10" Grid.RowSpan="2">
-            <ScrollViewer BorderBrush="Black">
-                <WrapPanel x:Name="WorkersStackPanel" HorizontalAlignment="Left" Margin="30, 10, 10, 10">
 
-                </WrapPanel>
-
-            </ScrollViewer>
-            
+        <Grid Grid.Column="1" Margin="10,10,10,10">
+            <DataGrid Name="WorkersDataGrid" AutoGenerateColumns="False" IsReadOnly="True" Background="White"
+              Margin="0,0,0,0">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="Auto"/>
+                    <DataGridTextColumn Header="Фамилия" Binding="{Binding surname}" Width="*"/>
+                    <DataGridTextColumn Header="Имя" Binding="{Binding name}" Width="*"/>
+                    <DataGridTextColumn Header="Отчество" Binding="{Binding patronymic}" Width="*"/>
+                    <DataGridTextColumn Header="Телефон" Binding="{Binding phone}" Width="*"/>
+                    <DataGridTextColumn Header="Дата рождения" Binding="{Binding date_of_birthday, StringFormat='dd/MM/yyyy'}" Width="Auto"/>
+                    <DataGridTextColumn Header="Логин" Binding="{Binding login}" Width="*"/>
+                    <DataGridTemplateColumn Header="Редактировать" Width="Auto">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Name="EditButton" Content="Редактировать" Click="EditButton_Click"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Удалить" Width="Auto">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Name="DeleteButton" Content="Удалить" Click="DeleteButton_Click"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
         </Grid>
-
-        <Grid Grid.Row="1" Grid.Column="1">
-            <Button Click="btnAddWorker" Content="Добавить водителя" Width="150" Height="40" HorizontalAlignment="Right" Margin="0, 0, 100, 0">
-                <Button.Resources>
-                    <Style TargetType="{x:Type Border}" x:Key="BorderStyle">
-                        <Setter Property="CornerRadius" Value="10"/>
-                    </Style>
-                </Button.Resources>
-                <Button.Template>
-                    <ControlTemplate TargetType="{x:Type Button}">
-                        <Border Background="{TemplateBinding Background}"
-                    BorderBrush="Green"
-                    BorderThickness="1"
-                    Style="{StaticResource BorderStyle}">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Border>
-                    </ControlTemplate>
-                </Button.Template>
-                <Button.Style>
-                    <Style TargetType="{x:Type Button}">
-                        <Setter Property="Background" Value="White"/>
-                        <Setter Property="Foreground" Value="Green"/>
-                        <Setter Property="FontWeight" Value="Normal"/>
-                        <Setter Property="FontSize" Value="14"/>
-                    </Style>
-                </Button.Style>
-            </Button>
-        </Grid>
-        
+        <Button Name="AddWorkerButton" Grid.Column="1" Grid.Row="2" Content="Добавить водителя" HorizontalAlignment="Right" Margin="0 5 40 5" Style="{StaticResource GreenRoundedButtonStyle}" FontSize="16" Click="AddWorkerButton_Click"/>
     </Grid>
 </Window>

@@ -66,12 +66,10 @@ namespace UchetPerevozki.Windows
                 CompleteRepairButton.Visibility = Visibility.Collapsed; // Скрываем кнопку
                 return;
             }
-            // Объект для отправки в API (используем анонимный тип)
             var updatePayload = new { status_id = 2 };
-            // Сериализация с использованием System.Text.Json
+
             var jsonPayload = JsonSerializer.Serialize(updatePayload);
             var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
-            // URL вашего FastAPI API
             string baseUrl;
             try
             {
@@ -115,6 +113,11 @@ namespace UchetPerevozki.Windows
                     MessageBox.Show($"Произошла непредвиденная ошибка: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
+        }
+
+        private void BackButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }

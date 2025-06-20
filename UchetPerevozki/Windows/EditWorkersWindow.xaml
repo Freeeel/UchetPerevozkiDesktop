@@ -5,60 +5,74 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:UchetPerevozki.Windows"
         mc:Ignorable="d"
-        Title="EditWorkersWindow" Height="800" Width="900">
+        FontSize="15"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        Height="630" Width="800">
+
     <Grid>
-        <StackPanel Margin="20">
-            <TextBlock Text="Редактирования информации о работнике" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24" FontWeight="Bold"/>
-          
-            <StackPanel Width="600" Margin="0 20 0 0">
-                
-                <TextBlock Text="ID" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5 0 0 0"/>
-                <Border Width="580" Height="32" CornerRadius="5" BorderThickness="1" BorderBrush="Black" Margin="0 3 0 0">
-                    <TextBox x:Name="IdTB"  BorderThickness="0" Width="570" Height="26" Padding="5" FontSize="14" IsReadOnly="True" />
-                </Border>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="80"/>
+        </Grid.RowDefinitions>
+        <!-- Основной контент формы -->
+        <Border Padding="20" CornerRadius="10" BorderThickness="1" Grid.Row="0" Margin="10,10,10,0">
+            <Grid >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <!-- Заголовок -->
+                <TextBlock Text="Редактирование информации о работнике" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Grid.Row="0" Grid.ColumnSpan="2" Margin="0,0,0,40"/>
 
-                <TextBlock Text="Фамилия" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5 15 0 0"/>
-                <Border Width="580" Height="32" CornerRadius="5" BorderThickness="1" BorderBrush="Black" Margin="0 3 0 0">
-                    <TextBox Name="SurnameTB"  BorderThickness="0" Width="570" Height="26" Padding="5 3 5 4" FontSize="14" MaxLength="50" />
-                </Border>
+                <TextBlock Text="ID" Grid.Row="1" Margin="5"/>
+                <TextBox Name="IdTB" Grid.Row="2" Margin="5" Height="35" Style="{StaticResource RoundedTextBoxStyle}" IsReadOnly="True"/>
 
+                <TextBlock Text="Фамилия" Grid.Row="1" Grid.Column="1" Margin="5"/>
+                <TextBox Name="SurnameTB" Grid.Row="2" Grid.Column="1" Margin="5" Height="35" Style="{StaticResource RoundedTextBoxStyle}" MaxLength="50"/>
 
-                <TextBlock Text="Имя" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5 15 0 0"/>
-                <Border Width="580" Height="32" CornerRadius="5" BorderThickness="1" BorderBrush="Black" Margin="0 3 0 0">
-                    <TextBox Name="NameTB"  BorderThickness="0" Width="570" Height="26" Padding="5 3 5 4" FontSize="14" MaxLength="50" />
-                </Border>
+                <TextBlock Text="Имя" Grid.Row="3" Margin="5"/>
+                <TextBox Name="NameTB" Grid.Row="4" Margin="5" Height="35" Style="{StaticResource RoundedTextBoxStyle}" MaxLength="50"/>
 
-                <TextBlock Text="Отчество" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5 15 0 0"/>
-                <Border Width="580" Height="32" CornerRadius="5" BorderThickness="1" BorderBrush="Black" Margin="0 3 0 0">
-                    <TextBox Name="PatronymicTB"  BorderThickness="0" Width="570" Height="26" Padding="5 3 5 4" FontSize="14"  MaxLength="50"/>
-                </Border>
+                <TextBlock Text="Логин" Grid.Row="3" Grid.Column="1" Margin="5"/>
+                <TextBox Name="LoginTB" Grid.Row="4" Grid.Column="1" Margin="5" Height="35" Style="{StaticResource RoundedTextBoxStyle}" MaxLength="50"/>
 
-                <TextBlock Text="Телефон" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5 15 0 0"/>
-                <Border Width="580" Height="32" CornerRadius="5" BorderThickness="1" BorderBrush="Black" Margin="0 3 0 0">
-                    <TextBox Name="PhoneTB"  BorderThickness="0" Width="570" Height="26" Padding="5 3 5 4" FontSize="14" MaxLength="12"/>
-                </Border>
+                <TextBlock Text="Отчество" Grid.Row="5" Margin="5"/>
+                <TextBox Name="PatronymicTB" Grid.Row="6" Margin="5" Height="35" Style="{StaticResource RoundedTextBoxStyle}" MaxLength="50"/>
 
-                <TextBlock Text="Адрес проживания" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5 15 0 0"/>
-                <Border Width="580" Height="32" CornerRadius="5" BorderThickness="1" BorderBrush="Black" Margin="0 3 0 0">
-                    <TextBox Name="AddressTB"  BorderThickness="0" Width="570" Height="26" Padding="5 3 5 4" FontSize="14" MaxLength="100" />
-                </Border>
+                <TextBlock Text="Пароль" Grid.Row="5" Grid.Column="1" Margin="5"/>
+                <PasswordBox Name="PasswordPB" Grid.Row="6" Grid.Column="1" Margin="5" Height="35" Style="{StaticResource RoundedPasswordBoxStyle}" MaxLength="50"/>
 
-                <TextBlock Text="Номер банковского счёта" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5 15 0 0"/>
-                <Border Width="580" Height="32" CornerRadius="5" BorderThickness="1" BorderBrush="Black" Margin="0 3 0 0">
-                    <TextBox Name="BankAccountNumberTB"  BorderThickness="0" Width="570" Height="26" Padding="5 3 5 4" FontSize="14"/>
-                </Border>
+                <TextBlock Text="Телефон" Grid.Row="7" Margin="5"/>
+                <TextBox Name="PhoneTB" Grid.Row="8" Margin="5" Height="35" Style="{StaticResource RoundedTextBoxStyle}" MaxLength="12"/>
 
-                <TextBlock Text="Логин" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5 15 0 0"/>
-                <Border Width="580" Height="32" CornerRadius="5" BorderThickness="1" BorderBrush="Black" Margin="0 3 0 0">
-                    <TextBox Name="LoginTB"  BorderThickness="0" Width="570" Height="26"  MaxLength="50" Padding="5 3 5 4" FontSize="14"/>
-                </Border>
+                <TextBlock Text="Адрес проживания" Grid.Row="7" Grid.Column="1" Margin="5"/>
+                <TextBox Name="AddressTB" Grid.Row="8" Grid.Column="1" Margin="5" Height="35" Style="{StaticResource RoundedTextBoxStyle}" MaxLength="100"/>
 
-                <TextBlock Text="Пароль" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5 15 0 0"/>
-                <Border Width="580" Height="32" CornerRadius="5" BorderThickness="1" BorderBrush="Black" Margin="0 3 0 0">
-                    <PasswordBox Name="PasswordPB" BorderThickness="0" Width="570" Height="26"  MaxLength="50" Padding="5 3 5 4" FontSize="14" />
-                </Border>
-            </StackPanel>
-            <Button Content="Сохранить" Click="SaveButton_Click" Margin="100,20,100,0"/>
+                <TextBlock Text="Номер банковского счёта" Grid.Row="9" Margin="5"/>
+                <TextBox Name="BankAccountNumberTB" Grid.Row="10" Margin="5" Height="35" Style="{StaticResource RoundedTextBoxStyle}"/>
+
+                <TextBlock Text="Транспортное средство" Grid.Row="9" Grid.Column="1" Margin="5"/>
+                <ComboBox Name="CarBrandTextBox" Grid.Row="10" Grid.Column="1" Margin="5" Height="32"/>
+            </Grid>
+        </Border>
+        <!-- Кнопки -->
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20,0,20" Grid.Row="1" Width="310">
+            <Button Name="BackButton" Content="Назад" Width="130" Height="40" FontSize="18" Margin="0 0 50 0" Style="{StaticResource RoundedButtonStyle}" Click="BackButton_Click"/>
+            <Button Name="SaveButton" Content="Сохранить" Width="130" Height="40" FontSize="18" Style="{StaticResource GreenRoundedButtonStyle}" Click="SaveButton_Click"/>
         </StackPanel>
     </Grid>
 </Window>

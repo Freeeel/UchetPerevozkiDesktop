@@ -67,7 +67,7 @@ namespace UchetPerevozki.Windows
         }
         private async void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            // Получаем значения из полей
+            
             string surname = SurnameTextBox.Text;
             string name = NameTextBox.Text;
             string patronymic = PatronymicTextBox.Text;
@@ -78,7 +78,7 @@ namespace UchetPerevozki.Windows
             string addressResidential = AddressResidentialTextBox.Text;
             string bankAccountNumberText = BankAccountNumberTextBox.Text;
             string selectedCar = CarBrandTextBox.SelectedItem?.ToString(); // Получаем выбранный автомобиль
-            // Проверка на заполненность полей
+            
             if (string.IsNullOrEmpty(surname) || string.IsNullOrEmpty(name) ||
                 string.IsNullOrEmpty(patronymic) || string.IsNullOrEmpty(dateOfBirth) ||
                 string.IsNullOrEmpty(phone) || string.IsNullOrEmpty(login) ||
@@ -86,29 +86,26 @@ namespace UchetPerevozki.Windows
                 string.IsNullOrEmpty(bankAccountNumberText) || string.IsNullOrEmpty(selectedCar))
             {
                 MessageBox.Show("Пожалуйста, заполните все поля!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return; // Прерываем выполнение метода, если поля не заполнены
+                return;
             }
-            // Проверка на корректность введенного номера банковского счета
+
             if (!int.TryParse(bankAccountNumberText, out int bank_account_number))
             {
                 MessageBox.Show("Пожалуйста, введите корректный номер банковского счета!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return; // Прерываем выполнение метода, если номер банковского счета некорректен
+                return;
             }
-            // Получаем выбранный автомобиль из ComboBox
+
             if (CarBrandTextBox.SelectedItem != null)
             {
-                // Предполагаем, что displayText в ComboBox имеет формат "Model - Stamp - State_number"
                 string[] carParts = selectedCar.Split(new string[] { " - " }, StringSplitOptions.None);
                 if (carParts.Length == 3)
                 {
                     string model = carParts[0];
                     string stamp = carParts[1];
                     string stateNumber = carParts[2];
-                    // Находим car_id по model, stamp и stateNumber (нужно будет запросить API для этого)
                     int carId = await GetCarIdFromAPI(model, stamp, stateNumber);
                     if (carId != 0)
                     {
-                        // Создаем объект с данными пользователя
                         var userData = new
                         {
                             surname,
@@ -122,33 +119,18 @@ namespace UchetPerevozki.Windows
                             bank_account_number = bank_account_number,
                             car_id = carId
                         };
-                        // Используем System.Text.Json для сериализации
-                        Console.WriteLine($"Данные для API: {JsonSerializer.Serialize(userData)}");
-                        // Вызываем API для добавления нового работника
                         bool success = await AddWorkerAsync(userData);
                         if (success)
                         {
                             MessageBox.Show("Работник успешно добавлен!");
-                            this.Close(); // Закрываем окно после успешного добавления
+                            this.Close();
                         }
                         else
                         {
                             MessageBox.Show("Не удалось добавить работника.");
                         }
                     }
-                    else
-                    {
-                        MessageBox.Show("Не удалось найти car_id для выбранного автомобиля.");
-                    }
                 }
-                else
-                {
-                    MessageBox.Show("Неверный формат данных автомобиля в ComboBox.");
-                }
-            }
-            else
-            {
-                MessageBox.Show("Выберите автомобиль из ComboBox.");
             }
         }
         private async Task<bool> AddWorkerAsync(object userData)
@@ -259,6 +241,11 @@ namespace UchetPerevozki.Windows
                     return 0;
                 }
             }
+        }
+
+        private void BackButton_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

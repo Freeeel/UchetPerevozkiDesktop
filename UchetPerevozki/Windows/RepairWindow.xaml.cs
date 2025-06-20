@@ -1,10 +1,10 @@
-﻿using Newtonsoft.Json;
+﻿
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -24,11 +24,13 @@ namespace UchetPerevozki.Windows
     public partial class RepairWindow : Window
     {
         private List<RepairWithUserName> _repairs;
-
-        public RepairWindow()
+        private UserResponse _userData;
+        public RepairWindow(UserResponse userData)
         {
             InitializeComponent();
             LoadRepairsDataAsync();
+            _userData = userData;
+            userNameTextBlock.Text = $"{_userData.Name} {_userData.Surname}";
         }
 
         private async Task LoadRepairsDataAsync()
@@ -166,6 +168,21 @@ namespace UchetPerevozki.Windows
                                                 // Или detailsWindow.Show(); // Show не блокирует текущее окно
                 }
             }
+        }
+
+
+        private void WorkersButton_Click(object sender, RoutedEventArgs e)
+        {
+            WorkersWindow workersWindow =new WorkersWindow(_userData);
+            workersWindow.Show();
+            this.Close();
+        }
+
+        private void HistoryReportsButton_Click(object sender, RoutedEventArgs e)
+        {
+            HistoryReportsWindow historyReportsWindow = new HistoryReportsWindow(_userData.Id);
+            historyReportsWindow.Show();
+            this.Close();
         }
     }
 }

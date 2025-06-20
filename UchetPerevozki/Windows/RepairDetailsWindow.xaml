@@ -5,37 +5,30 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:UchetPerevozki.Windows"
         mc:Ignorable="d"
-        Title="RepairDetailsWindow" Height="450" Width="800">
-    <Grid Margin="10">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <TextBlock Grid.Row="0" Grid.Column="0" Text="ID:" FontWeight="Bold" Margin="0,5,5,5"/>
-        <TextBlock Grid.Row="0" Grid.Column="1" x:Name="IdTextBlock" Margin="0,5,5,5"/>
-        
-        <TextBlock Grid.Row="1" Grid.Column="0" Text="Описание:" FontWeight="Bold" Margin="0,5,5,5"/>
-        <TextBlock Grid.Row="1" Grid.Column="1" x:Name="DescriptionTextBlock" TextWrapping="Wrap" Margin="0,5,5,5"/>
-        <!-- Добавлен x:Name -->
-        <TextBlock Grid.Row="2" Grid.Column="0" Text="Дата и время:" FontWeight="Bold" Margin="0,5,5,5"/>
-        <TextBlock Grid.Row="2" Grid.Column="1" x:Name="DateTimeTextBlock" Margin="0,5,5,5"/>
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        FontSize="15"
+        Title="Детали заявки на ремонт" Height="500" Width="600">
+    
+    <StackPanel Margin="10" HorizontalAlignment="Center">
 
-        <TextBlock Grid.Row="4" Grid.Column="0" Text="Пользователь:" FontWeight="Bold" Margin="0,5,5,5"/>
-        <TextBlock Grid.Row="4" Grid.Column="1" x:Name="UserNameTextBlock" Margin="0,5,5,5"/>
+        <TextBlock  Text="ID:"  Margin="5"/>
+        <TextBox  Name="IdTextBlock" Style="{StaticResource RoundedTextBoxStyle}" Height="32" FontSize="14" IsReadOnly="True" Margin="10 0" Width="390"/>
 
-        <TextBlock Grid.Row="5" Grid.Column="0" Text="Статус:" FontWeight="Bold" Margin="0,5,5,5"/>
-        <TextBlock Grid.Row="5" Grid.Column="1" x:Name="StatusTextBox" Margin="0,5,5,5"/>
+        <TextBlock  Text="Описание:"  Margin="5 20 0 5"/>
+        <TextBox  Name="DescriptionTextBlock" Style="{StaticResource RoundedTextBoxStyle}" Height="32" FontSize="14" IsReadOnly="True" Margin="10 0" Width="390"/>
 
-        <Button Name="CompleteRepairButton" Grid.Row="7" Grid.ColumnSpan="2" Content="Сохранить" HorizontalAlignment="Right" Margin="0,10,5,5" Click="CompleteRepairButton_Click" />
-    </Grid>
+        <TextBlock  Text="Дата и время:"  Margin="5 20 0 5"/>
+        <TextBox Name="DateTimeTextBlock"  Style="{StaticResource RoundedTextBoxStyle}" Height="32" FontSize="14" IsReadOnly="True" Margin="10 0" Width="390"/>
+
+        <TextBlock  Text="Пользователь:"  Margin="5 20 0 5"/>
+        <TextBox  Name="UserNameTextBlock" Style="{StaticResource RoundedTextBoxStyle}" Height="32" FontSize="14" IsReadOnly="True" Margin="10 0" Width="390"/>
+
+        <TextBlock  Text="Статус:"  Margin="5 20 0 5"/>
+        <TextBox Name="StatusTextBox" Style="{StaticResource RoundedTextBoxStyle}" Height="32" FontSize="14" IsReadOnly="True" Margin="10 0" Width="390"/>
+        <Grid Margin="0 30">
+            <Button Name="CompleteRepairButton"  Content="Завершить заявку" HorizontalAlignment="Right" Margin="0 0 30 0" Click="CompleteRepairButton_Click" Style="{StaticResource GreenRoundedButtonStyle}"/>
+            <Button Name="BackButton"  Content="Назад" HorizontalAlignment="Left" Margin="30 0 0 0" Click="BackButton_Click" Style="{StaticResource RoundedButtonStyle}" Width="100" />
+        </Grid>
+    </StackPanel>
 </Window>

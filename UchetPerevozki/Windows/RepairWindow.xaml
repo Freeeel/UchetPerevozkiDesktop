@@ -5,7 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:UchetPerevozki.Windows"
         mc:Ignorable="d"
-        Title="RepairWindow" Height="700" Width="1380">
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        Title="Заявки на ремонт" Height="700" Width="1380">
 
 
     <Grid>
@@ -21,9 +23,21 @@
         <!-- Боковая панель -->
         <StackPanel Background="#4CAF50" Grid.RowSpan="2">
             <Image Source="C:\Users\Дмитрий\Desktop\иконки\iconProfile.png" Width="120" Height="106" Margin="0,70,0,0"/>
-            <TextBlock x:Name="userNameTextBlock" Text="" FontSize="20" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,15,0,0" />
+            <TextBlock Name="userNameTextBlock" Text="" FontSize="20" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,15,0,0" />
 
+            <Button Name="HistoryReportsButton" Background="#00000000" BorderBrush="#00000000" BorderThickness="0" Width="230" Margin="0,65,0,0" Click="HistoryReportsButton_Click">
+                <Image Source="/icons/historyReports.png" Stretch="Fill" />
+            </Button>
+
+            <Button Name="WorkersButton" Background="#00000000" BorderBrush="#00000000" BorderThickness="0" Width="230" Margin="0,20,0,0" Click="WorkersButton_Click" >
+                <Image Source="/icons/personal.png" Stretch="Fill" />
+            </Button>
+
+            <Button Name="RepairsButton" Background="#00000000" BorderBrush="#00000000" BorderThickness="0" Width="230" Margin="0,20,0,0">
+                <Image Source="/icons/repairActive.png" Stretch="Fill" />
+            </Button>
         </StackPanel>
+
 
         <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Margin="5">
             <RadioButton Content="Все заявки" IsChecked="True" GroupName="StatusFilter" Checked="StatusFilter_Checked"/>

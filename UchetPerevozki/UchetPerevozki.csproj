@@ -149,6 +149,9 @@
     <Compile Include="Windows\RepairWindow.xaml.cs">
       <DependentUpon>RepairWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\ReportsDetailsWindow.xaml.cs">
+      <DependentUpon>ReportsDetailsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\WorkersWindow.xaml.cs">
       <DependentUpon>WorkersWindow.xaml</DependentUpon>
     </Compile>
@@ -184,6 +187,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\RepairWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ReportsDetailsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -226,6 +233,16 @@
     <Resource Include="ipAddress.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\historyReports.png" />
+    <Resource Include="icons\historyReportsActive.png" />
+    <Resource Include="icons\personal.png" />
+    <Resource Include="icons\repairs.png" />
+    <Resource Include="icons\workersActive.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\repairActive.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
