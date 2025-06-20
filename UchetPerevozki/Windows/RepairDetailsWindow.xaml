@@ -13,19 +13,19 @@
     <StackPanel Margin="10" HorizontalAlignment="Center">
 
         <TextBlock  Text="ID:"  Margin="5"/>
-        <TextBox  Name="IdTextBlock" Style="{StaticResource RoundedTextBoxStyle}" Height="32" FontSize="14" IsReadOnly="True" Margin="10 0" Width="390"/>
+        <TextBox  Name="IdTextBlock" Text="{Binding Id}"  Style="{StaticResource RoundedTextBoxStyle}" Height="32" FontSize="14" IsReadOnly="True" Margin="10 0" Width="390"/>
 
         <TextBlock  Text="Описание:"  Margin="5 20 0 5"/>
-        <TextBox  Name="DescriptionTextBlock" Style="{StaticResource RoundedTextBoxStyle}" Height="32" FontSize="14" IsReadOnly="True" Margin="10 0" Width="390"/>
+        <TextBox  Name="DescriptionTextBlock" Text="{Binding description_breakdown}" Style="{StaticResource RoundedTextBoxStyle}" Height="32" FontSize="14" IsReadOnly="True" Margin="10 0" Width="390"/>
 
         <TextBlock  Text="Дата и время:"  Margin="5 20 0 5"/>
-        <TextBox Name="DateTimeTextBlock"  Style="{StaticResource RoundedTextBoxStyle}" Height="32" FontSize="14" IsReadOnly="True" Margin="10 0" Width="390"/>
+        <TextBox Name="DateTimeTextBlock" Text="{Binding date_and_time_repair}"  Style="{StaticResource RoundedTextBoxStyle}" Height="32" FontSize="14" IsReadOnly="True" Margin="10 0" Width="390"/>
 
         <TextBlock  Text="Пользователь:"  Margin="5 20 0 5"/>
-        <TextBox  Name="UserNameTextBlock" Style="{StaticResource RoundedTextBoxStyle}" Height="32" FontSize="14" IsReadOnly="True" Margin="10 0" Width="390"/>
+        <TextBox  Name="UserNameTextBlock" Text="{Binding user_name}"  Style="{StaticResource RoundedTextBoxStyle}" Height="32" FontSize="14" IsReadOnly="True" Margin="10 0" Width="390"/>
 
         <TextBlock  Text="Статус:"  Margin="5 20 0 5"/>
-        <TextBox Name="StatusTextBox" Style="{StaticResource RoundedTextBoxStyle}" Height="32" FontSize="14" IsReadOnly="True" Margin="10 0" Width="390"/>
+        <TextBox Name="StatusTextBox" Text="{Binding status_text, Mode=OneWay}"  Style="{StaticResource RoundedTextBoxStyle}" Height="32" FontSize="14" IsReadOnly="True" Margin="10 0" Width="390"/>
         <Grid Margin="0 30">
             <Button Name="CompleteRepairButton"  Content="Завершить заявку" HorizontalAlignment="Right" Margin="0 0 30 0" Click="CompleteRepairButton_Click" Style="{StaticResource GreenRoundedButtonStyle}"/>
             <Button Name="BackButton"  Content="Назад" HorizontalAlignment="Left" Margin="30 0 0 0" Click="BackButton_Click" Style="{StaticResource RoundedButtonStyle}" Width="100" />

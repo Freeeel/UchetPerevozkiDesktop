@@ -82,6 +82,23 @@ namespace UchetPerevozki
             }
         }
 
+        private async Task DeleteWorkerAsync(int userId)
+        {
+            using (var client = new HttpClient())
+            {
+                string baseAddress = File.ReadAllText("C:\\Users\\Дмитрий\\source\\repos\\UchetPerevozki\\UchetPerevozki\\ipAddress.txt").Trim();
+                client.BaseAddress = new Uri(baseAddress);
+                // Make a DELETE request to your FastAPI endpoint
+                // The endpoint should be similar to what was previously generated: "/users/{user_id}"
+                var response = await client.DeleteAsync($"/users/{userId}");
+                if (!response.IsSuccessStatusCode)
+                {
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    throw new Exception($"Ошибка API: {response.StatusCode} - {errorContent}");
+                }
+            }
+        }
+
         private void btnAddWorker(object sender, RoutedEventArgs e)
         {
             AddWorkersWindow addWorkersWindow = new AddWorkersWindow();
@@ -121,9 +138,25 @@ namespace UchetPerevozki
             WorkerResponse selectedWorker = (sender as Button).DataContext as WorkerResponse;
             if (selectedWorker != null)
             {
-                // Логика удаления работника, например, запрос подтверждения
-                MessageBox.Show($"Удалить работника: {selectedWorker.surname}");
-                // Вызвать метод API для удаления, затем обновить DataGrid
+                MessageBoxResult result = MessageBox.Show(
+                    $"Вы уверены, что хотите удалить работника: {selectedWorker.surname} {selectedWorker.name}?",
+                    "Подтверждение удаления",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Warning
+                );
+                if (result == MessageBoxResult.Yes)
+                {
+                    try
+                    {
+                        DeleteWorkerAsync(selectedWorker.Id); // Assuming 'id' is the unique identifier
+                        MessageBox.Show("Работник успешно удален.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                        LoadData(); // Reload data to update the DataGrid
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Ошибка при удалении работника: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
             }
         }
 

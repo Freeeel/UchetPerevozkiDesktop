@@ -7,6 +7,7 @@
         mc:Ignorable="d"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
+        FontSize="15"
         Title="Заявки на ремонт" Height="700" Width="1380">
 
 
@@ -39,28 +40,38 @@
         </StackPanel>
 
 
-        <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Margin="5">
-            <RadioButton Content="Все заявки" IsChecked="True" GroupName="StatusFilter" Checked="StatusFilter_Checked"/>
-            <RadioButton Content="Активные" GroupName="StatusFilter" Margin="10,0,0,0" Checked="StatusFilter_Checked"/>
-            <RadioButton Content="Выполненные" GroupName="StatusFilter" Margin="10,0,0,0" Checked="StatusFilter_Checked"/>
+        <StackPanel Name="FilterStackPanel" Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center" >
+            <RadioButton Content="Все заявки" IsChecked="True" GroupName="StatusFilter" Checked="StatusFilter_Checked" FontSize="16"/>
+            <RadioButton Content="Активные" GroupName="StatusFilter" Margin="20,0,0,0" Checked="StatusFilter_Checked" FontSize="16"/>
+            <RadioButton Content="Выполненные" GroupName="StatusFilter" Margin="20,0,0,0" Checked="StatusFilter_Checked" FontSize="16"/>
         </StackPanel>
 
-        <DataGrid Name="RepairsDataGrid" Grid.Column="1" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True" Grid.RowSpan="2" FontSize="24" MouseDoubleClick="RepairsDataGrid_MouseDoubleClick">
+        <DataGrid Name="RepairsDataGrid" Margin="30,00,30,30"  Grid.Column="1" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True" Grid.RowSpan="2"  MouseDoubleClick="RepairsDataGrid_MouseDoubleClick" >
             <DataGrid.Columns>
-                <DataGridTextColumn Header="ID" Width="40" Binding="{Binding Id}"/>
-                <DataGridTextColumn Header="Описание" Width="*"  Binding="{Binding description_breakdown}">
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="TextWrapping" Value="Wrap"/>
-                            <!-- Включаем перенос текста -->
-                            <Setter Property="VerticalAlignment" Value="Center"/>
-                            <!-- Выравнивание текста по центру ячейки -->
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
-                <DataGridTextColumn Header="Дата и время" Width="*" Binding="{Binding date_and_time_repair}"/>
-                <DataGridTextColumn Header="Статус ID" Width="*" Binding="{Binding status_text}"/>
-                <DataGridTextColumn Header="Имя пользователя" Width="*" Binding="{Binding user_name}"/>
+                <DataGridTextColumn Header="ID" 
+                            Width="40" 
+                            Binding="{Binding Id}"
+                            ElementStyle="{StaticResource CenteredCellStyle}"/>
+
+                <DataGridTextColumn Header="Описание" 
+                            Width="*"  
+                            Binding="{Binding description_breakdown}"
+                            ElementStyle="{StaticResource WrappedCellStyle}"/>
+
+                <DataGridTextColumn Header="Дата и время" 
+                            Width="*" 
+                            Binding="{Binding date_and_time_repair, StringFormat='dd.MM.yyyy HH:mm'}"
+                            ElementStyle="{StaticResource CenteredCellStyle}"/>
+
+                <DataGridTextColumn Header="Статус" 
+                            Width="*" 
+                            Binding="{Binding status_text}"
+                            ElementStyle="{StaticResource StatusCellStyle}"/>
+
+                <DataGridTextColumn Header="Пользователь" 
+                            Width="*" 
+                            Binding="{Binding user_name}"
+                            ElementStyle="{StaticResource CenteredCellStyle}"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

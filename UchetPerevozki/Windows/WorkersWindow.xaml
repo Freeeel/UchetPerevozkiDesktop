@@ -38,28 +38,77 @@
         </StackPanel>
 
 
-        <Grid Grid.Column="1" Margin="10,10,10,10">
-            <DataGrid Name="WorkersDataGrid" AutoGenerateColumns="False" IsReadOnly="True" Background="White"
-              Margin="0,0,0,0">
+        <Grid Grid.Column="1" Margin="10">
+            <DataGrid Name="WorkersDataGrid" 
+              AutoGenerateColumns="False" 
+              IsReadOnly="True"
+              Margin="30,30,30,0" >
+
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="Auto"/>
-                    <DataGridTextColumn Header="Фамилия" Binding="{Binding surname}" Width="*"/>
-                    <DataGridTextColumn Header="Имя" Binding="{Binding name}" Width="*"/>
-                    <DataGridTextColumn Header="Отчество" Binding="{Binding patronymic}" Width="*"/>
-                    <DataGridTextColumn Header="Телефон" Binding="{Binding phone}" Width="*"/>
-                    <DataGridTextColumn Header="Дата рождения" Binding="{Binding date_of_birthday, StringFormat='dd/MM/yyyy'}" Width="Auto"/>
-                    <DataGridTextColumn Header="Логин" Binding="{Binding login}" Width="*"/>
-                    <DataGridTemplateColumn Header="Редактировать" Width="Auto">
+                    <!-- ID -->
+                    <DataGridTextColumn Header="ID" 
+                               Binding="{Binding Id}" 
+                               Width="Auto"
+                               ElementStyle="{StaticResource CenteredCellStyle}"/>
+
+                    <!-- Фамилия -->
+                    <DataGridTextColumn Header="Фамилия" 
+                               Binding="{Binding surname}" 
+                               Width="*"
+                               ElementStyle="{StaticResource LeftAlignedCellStyle}"/>
+
+                    <!-- Имя -->
+                    <DataGridTextColumn Header="Имя" 
+                               Binding="{Binding name}" 
+                               Width="*"
+                               ElementStyle="{StaticResource LeftAlignedCellStyle}"/>
+
+                    <!-- Отчество -->
+                    <DataGridTextColumn Header="Отчество" 
+                               Binding="{Binding patronymic}" 
+                               Width="*"
+                               ElementStyle="{StaticResource LeftAlignedCellStyle}"/>
+
+                    <!-- Телефон -->
+                    <DataGridTextColumn Header="Телефон" 
+                               Binding="{Binding phone}" 
+                               Width="*"
+                               ElementStyle="{StaticResource LeftAlignedCellStyle}"/>
+
+                    <!-- Дата рождения -->
+                    <DataGridTextColumn Header="Дата рождения" 
+                               Binding="{Binding date_of_birthday, StringFormat='dd/MM/yyyy'}" 
+                               Width="Auto"
+                               ElementStyle="{StaticResource CenteredCellStyle}"/>
+
+                    <!-- Логин -->
+                    <DataGridTextColumn Header="Логин" 
+                               Binding="{Binding login}" 
+                               Width="*"
+                               ElementStyle="{StaticResource LeftAlignedCellStyle}"/>
+
+                    <!-- Кнопка редактирования -->
+                    <DataGridTemplateColumn Header="Редактировать" 
+                                  Width="Auto">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Button Name="EditButton" Content="Редактировать" Click="EditButton_Click"/>
+                                <Button Name="EditButton" 
+                               Content="Редактировать" 
+                               Style="{StaticResource DataGridButtonStyle}"
+                               Click="EditButton_Click"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="Удалить" Width="Auto">
+
+                    <!-- Кнопка удаления -->
+                    <DataGridTemplateColumn Header="Удалить" 
+                                  Width="Auto">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Button Name="DeleteButton" Content="Удалить" Click="DeleteButton_Click"/>
+                                <Button Name="DeleteButton" 
+                               Content="Удалить" 
+                               Style="{StaticResource DataGridDeleteButtonStyle}"
+                               Click="DeleteButton_Click"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

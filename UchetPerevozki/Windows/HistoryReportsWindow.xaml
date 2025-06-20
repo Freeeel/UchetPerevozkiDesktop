@@ -8,6 +8,7 @@
         Loaded="WindowLoaded"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
+        FontSize="15"
         Title="История отчётов" Height="700" Width="1380">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -36,15 +37,60 @@
 
         <!-- Основная область -->
         <Grid Grid.Column="1" >
-            <ScrollViewer>
-                <DataGrid Name="ReportsDataGrid" AutoGenerateColumns="False" IsReadOnly="True" Background="White" Margin="60,20,60,20" MouseDoubleClick="ReportsDataGrid_MouseDoubleClick">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <!-- Для поля поиска -->
+                <RowDefinition Height="*"/>
+                <!-- Для DataGrid -->
+            </Grid.RowDefinitions>
+            <!-- Поле для поиска -->
+            <TextBox Grid.Row="0"
+                     Name="SearchTextBox"
+                     Margin="30,10,30,10"
+                     Padding="5"
+                     FontSize="16"
+                     VerticalContentAlignment="Center"
+                     TextWrapping="Wrap"
+                     VerticalAlignment="Center"
+                     HorizontalAlignment="Stretch"
+                     TextChanged="SearchTextBox_TextChanged">
+                <TextBox.Resources>
+                    <Style TargetType="{x:Type Border}">
+                        <Setter Property="CornerRadius" Value="5"/>
+                    </Style>
+                </TextBox.Resources>
+            </TextBox>
+            <ScrollViewer Grid.Row="1">
+                <DataGrid Name="ReportsDataGrid"
+                          AutoGenerateColumns="False"
+                          IsReadOnly="True"
+                          Background="White"
+                          Margin="30,0,30,30" MouseDoubleClick="ReportsDataGrid_MouseDoubleClick">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="№" Width="30" Binding="{Binding Id}"/>
-                        <DataGridTextColumn Header="Груз" Width="300" Binding="{Binding cargo}"/>
-                        <DataGridTextColumn Header="Дата" Width="*" Binding="{Binding report_date_time}"/>
-                        <DataGridTextColumn Header="Откуда" Width="*" Binding="{Binding point_departure}"/>
-                        <DataGridTextColumn Header="Куда" Width="*" Binding="{Binding point_destination}"/>
-                        <DataGridTextColumn Header="Перевозчик" Width="*" Binding="{Binding user_full_name}"/>
+                        <DataGridTextColumn Header="№"
+                           Width="30"
+                           Binding="{Binding Id}"
+                           ElementStyle="{StaticResource CenteredCellStyle}"/>
+                        <DataGridTextColumn Header="Груз"
+                           Width="300"
+                           Binding="{Binding cargo}"
+                           ElementStyle="{StaticResource WrappedCellStyle}"/>
+                        <DataGridTextColumn Header="Дата"
+                           Width="*"
+                           Binding="{Binding report_date_time, StringFormat='dd.MM.yyyy HH:mm'}"
+                           ElementStyle="{StaticResource CenteredCellStyle}"/>
+                        <DataGridTextColumn Header="Откуда"
+                           Width="*"
+                           Binding="{Binding point_departure}"
+                           ElementStyle="{StaticResource LeftAlignedCellStyle}"/>
+                        <DataGridTextColumn Header="Куда"
+                           Width="*"
+                           Binding="{Binding point_destination}"
+                           ElementStyle="{StaticResource LeftAlignedCellStyle}"/>
+                        <DataGridTextColumn Header="Перевозчик"
+                           Width="*"
+                           Binding="{Binding user_full_name}"
+                           ElementStyle="{StaticResource LeftAlignedCellStyle}"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </ScrollViewer>

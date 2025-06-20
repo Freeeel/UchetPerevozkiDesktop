@@ -89,12 +89,6 @@ namespace UchetPerevozki.Windows
                 return;
             }
 
-            if (!int.TryParse(bankAccountNumberText, out int bank_account_number))
-            {
-                MessageBox.Show("Пожалуйста, введите корректный номер банковского счета!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
             if (CarBrandTextBox.SelectedItem != null)
             {
                 string[] carParts = selectedCar.Split(new string[] { " - " }, StringSplitOptions.None);
@@ -116,7 +110,7 @@ namespace UchetPerevozki.Windows
                             login,
                             password,
                             address_residential = addressResidential,
-                            bank_account_number = bank_account_number,
+                            bank_account_number = bankAccountNumberText,
                             car_id = carId
                         };
                         bool success = await AddWorkerAsync(userData);

@@ -25,33 +25,31 @@ namespace UchetPerevozki.Windows
     public partial class RepairDetailsWindow : Window
     {
         private RepairWithUserName _currentRepair; // Для хранения текущего объекта ремонта
+        // Конструктор: принимает ссылку на объект, который нужно редактировать
         public RepairDetailsWindow(RepairWithUserName repair)
         {
             InitializeComponent();
-            _currentRepair = repair; // Сохраняем переданный объект
-            DisplayRepairDetails(repair);
+            _currentRepair = repair;
+
+            this.DataContext = _currentRepair;
+
+            UpdateCompleteButtonVisibility();
         }
-        private void DisplayRepairDetails(RepairWithUserName repair)
+
+        private void UpdateCompleteButtonVisibility()
         {
-            if (repair != null)
+            if (_currentRepair != null && _currentRepair.status_id == 1) // 1 соответствует "Активна"
             {
-                IdTextBlock.Text = repair.Id.ToString();
-                DescriptionTextBlock.Text = repair.description_breakdown;
-                StatusTextBox.Text = repair.status_text;
-                DateTimeTextBlock.Text = repair.date_and_time_repair.ToString();
-                UserNameTextBlock.Text = repair.user_name;
-                // Показываем кнопку, если статус "Активна"
-                // Убедитесь, что у вас есть кнопка с именем CompleteRepairButton в XAML
-                if (repair.status_id == 1) // 1 соответствует "Активна"
-                {
-                    CompleteRepairButton.Visibility = Visibility.Visible;
-                }
-                else
-                {
-                    CompleteRepairButton.Visibility = Visibility.Collapsed;
-                }
+                CompleteRepairButton.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                CompleteRepairButton.Visibility = Visibility.Collapsed;
             }
         }
+
+
+
         private async void CompleteRepairButton_Click(object sender, RoutedEventArgs e)
         {
             if (_currentRepair == null)
@@ -59,15 +57,15 @@ namespace UchetPerevozki.Windows
                 MessageBox.Show("Данные о ремонте отсутствуют.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-            // Проверяем, что ремонт действительно активен перед отправкой запроса
             if (_currentRepair.status_id != 1)
             {
                 MessageBox.Show("Ремонт уже не активен.", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
-                CompleteRepairButton.Visibility = Visibility.Collapsed; // Скрываем кнопку
+
+                UpdateCompleteButtonVisibility();
+                this.DialogResult = false;
                 return;
             }
-            var updatePayload = new { status_id = 2 };
-
+            var updatePayload = new { status_id = 2 }; // Payload для сервера
             var jsonPayload = JsonSerializer.Serialize(updatePayload);
             var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
             string baseUrl;
@@ -78,6 +76,7 @@ namespace UchetPerevozki.Windows
             catch (Exception ex)
             {
                 MessageBox.Show($"Не удалось прочитать адрес API из файла: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                this.DialogResult = false;
                 return;
             }
             string apiUrl = $"{baseUrl}/repairs/{_currentRepair.Id}";
@@ -89,34 +88,39 @@ namespace UchetPerevozki.Windows
                     if (response.IsSuccessStatusCode)
                     {
                         MessageBox.Show("Статус ремонта успешно обновлен на 'Выполнена'.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
-                        // Обновляем локальный статус и UI
+
                         _currentRepair.status_id = 2;
-                        StatusTextBox.Text = _currentRepair.status_text; // Обновит текст на "Выполнена"
-                        CompleteRepairButton.Visibility = Visibility.Collapsed; // Скрываем кнопку
+                        UpdateCompleteButtonVisibility();
+                        this.DialogResult = true;
                     }
                     else
                     {
                         string errorContent = await response.Content.ReadAsStringAsync();
                         MessageBox.Show($"Ошибка при обновлении статуса ремонта: {response.StatusCode}\n{errorContent}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                        this.DialogResult = false;
                     }
                 }
                 catch (HttpRequestException httpEx)
                 {
                     MessageBox.Show($"Ошибка HTTP запроса: {httpEx.Message}", "Ошибка сети", MessageBoxButton.OK, MessageBoxImage.Error);
+                    this.DialogResult = false;
                 }
-                catch (JsonException jsonEx) // Исключение для System.Text.Json
+                catch (JsonException jsonEx)
                 {
-                    MessageBox.Show($"Ошибка сериализации JSON: {jsonEx.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show($"Ошибка десериализации JSON: {jsonEx.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    this.DialogResult = false;
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show($"Произошла непредвиденная ошибка: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    this.DialogResult = false;
                 }
             }
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
+            this.DialogResult = false;
             this.Close();
         }
     }

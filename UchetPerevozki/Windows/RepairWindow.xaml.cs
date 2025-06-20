@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -23,23 +24,30 @@ namespace UchetPerevozki.Windows
     /// </summary>
     public partial class RepairWindow : Window
     {
-        private List<RepairWithUserName> _repairs;
+        private ObservableCollection<RepairWithUserName> _repairs;
         private UserResponse _userData;
         public RepairWindow(UserResponse userData)
         {
             InitializeComponent();
+            _repairs = new ObservableCollection<RepairWithUserName>();
+            RepairsDataGrid.ItemsSource = _repairs;
+
             LoadRepairsDataAsync();
             _userData = userData;
-            userNameTextBlock.Text = $"{_userData.Name} {_userData.Surname}";
+            userNameTextBlock.Text = $"{_userData.Name} {_userData.Name}";
         }
-
         private async Task LoadRepairsDataAsync()
         {
             try
             {
-                _repairs = await GetRepairsWithUsersAsync(); // Получаем все данные
-                                                             // Применяем фильтр по умолчанию (например, "Все заявки")
-                ApplyFilter();
+                // Очищаем коллекцию перед добавлением новых данных
+                _repairs.Clear();
+                List<RepairWithUserName> fetchedRepairs = await GetRepairsWithUsersAsync();
+                foreach (var repair in fetchedRepairs)
+                {
+                    _repairs.Add(repair); // Добавляем данные в ObservableCollection
+                }
+                ApplyFilter(); // Применяем фильтр к загруженным данным
             }
             catch (Exception ex)
             {
@@ -93,32 +101,32 @@ namespace UchetPerevozki.Windows
             {
                 return;
             }
-            IEnumerable<RepairWithUserName> filteredRepairs = _repairs;
+            IEnumerable<RepairWithUserName> filteredRepairs = _repairs; // Начинаем с ObservableCollection
             // Проверяем, какой радиобаттон выбран, и применяем соответствующий фильтр
-            if (FindRadioButton("Активные").IsChecked == true)
+            // Убедитесь, что RadioButton'ы имеют x:Name и GroupName,
+            // а FindRadioButton() корректно их находит.
+            if (FindRadioButton("Активные")?.IsChecked == true) // Используем безопасный вызов ?.
             {
                 filteredRepairs = _repairs.Where(r => r.status_id == 1);
             }
-            else if (FindRadioButton("Выполненные").IsChecked == true)
+            else if (FindRadioButton("Выполненные")?.IsChecked == true)
             {
                 filteredRepairs = _repairs.Where(r => r.status_id == 2);
             }
             // Если ни "Активные", ни "Выполненные" не выбраны, остается фильтр по умолчанию ("Все заявки")
-            DataGrid repairsDataGrid = this.FindName("RepairsDataGrid") as DataGrid;
-            if (repairsDataGrid != null)
-            {
-                repairsDataGrid.ItemsSource = filteredRepairs.ToList();
-            }
+            // **ВАЖНОЕ ИЗМЕНЕНИЕ:** Присваиваем отфильтрованный список свойству ItemsSource DataGrid.
+            // DataGrid repairsDataGrid = this.FindName("RepairsDataGrid") as DataGrid; // Эта строка не нужна, если RepairsDataGrid доступен напрямую
+            // if (repairsDataGrid != null) { ... }
+            RepairsDataGrid.ItemsSource = filteredRepairs.ToList(); // ItemsSource будет перепривязан к новому List
         }
         // Вспомогательный метод для поиска радиобаттона по его Content
+        // (Предполагается, что FilterStackPanel имеет x:Name="FilterStackPanel" в XAML)
         private RadioButton FindRadioButton(string content)
         {
-            // Ищем радиобаттоны в визуальном дереве, например, в StackPanel
-            // Вам может потребоваться адаптировать этот поиск в зависимости от вашей XAML структуры
-            StackPanel filterPanel = this.FindName("FilterStackPanel") as StackPanel; // Добавьте x:Name="FilterStackPanel" к StackPanel
-            if (filterPanel != null)
+            // Пример: Ищем радиобаттоны в StackPanel, если FilterStackPanel доступен напрямую
+            if (FilterStackPanel != null) // Замените FilterStackPanel на имя вашего StackPanel
             {
-                foreach (var child in filterPanel.Children)
+                foreach (var child in FilterStackPanel.Children)
                 {
                     if (child is RadioButton radioButton && radioButton.Content.ToString() == content)
                     {
@@ -126,14 +134,13 @@ namespace UchetPerevozki.Windows
                     }
                 }
             }
-            // Если радиобаттон не найден в StackPanel, попробуйте найти его в другом месте
-            // Этот код может потребовать доработки в зависимости от вашей XAML структуры
-            // Простой пример поиска по всему визуальному дереву (менее эффективно для больших деревьев)
-            return FindVisualChild<RadioButton>(this, rb => rb.Content.ToString() == content && rb.GroupName == "StatusFilter");
+            // Если не нашли или FilterStackPanel не существует, попробуйте FindVisualChild
+            return FindVisualChild<RadioButton>(this, rb => rb.Content.ToString() == content); // Убрал GroupName для гибкости
         }
-        // Вспомогательный метод для поиска визуального дочернего элемента (тот же, что и раньше)
+        // Вспомогательный метод для поиска визуального дочернего элемента
         private T FindVisualChild<T>(DependencyObject parent, Func<T, bool> predicate) where T : DependencyObject
         {
+            if (parent == null) return null;
             for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
             {
                 DependencyObject child = VisualTreeHelper.GetChild(parent, i);
@@ -152,32 +159,36 @@ namespace UchetPerevozki.Windows
             }
             return null;
         }
-
+        // Обработчик двойного клика по строке DataGrid
         private void RepairsDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            if (RepairsDataGrid.SelectedItem != null)
+            // Проверяем, что есть выбранный элемент и это RepairWithUserName
+            if (RepairsDataGrid.SelectedItem is RepairWithUserName selectedRepair)
             {
-                // Получаем выбранный объект данных
-                if (RepairsDataGrid.SelectedItem is RepairWithUserName selectedRepair)
+                // Создаем и открываем окно деталей, передавая ему ссылку на выбранный объект.
+                RepairDetailsWindow detailsWindow = new RepairDetailsWindow(selectedRepair);
+                // **ВАЖНО:** Используем ShowDialog(), чтобы заблокировать родительское окно
+                // и получить результат после закрытия окна деталей.
+                bool? dialogResult = detailsWindow.ShowDialog();
+                // Проверяем DialogResult из RepairDetailsWindow
+                if (dialogResult == true) // Если RepairDetailsWindow сообщило об успешном изменении
                 {
-                    // Создаем новое окно для отображения деталей
-                    // Предполагается, что у вас есть окно с именем RepairDetailsWindow
-                    RepairDetailsWindow detailsWindow = new RepairDetailsWindow(selectedRepair);
-                    // Отображаем новое окно
-                    detailsWindow.ShowDialog(); // ShowDialog блокирует текущее окно до закрытия нового
-                                                // Или detailsWindow.Show(); // Show не блокирует текущее окно
+                    // Так как _repairs (ObservableCollection) содержит ссылку на тот же объект,
+                    // и объект RepairWithUserName реализует INotifyPropertyChanged,
+                    // DataGrid уже обновил значения в строке.
+                    // Однако, если изменение статуса привело к тому, что строка
+                    // должна исчезнуть/появиться из-за фильтрации, нужно заново применить фильтр.
+                    ApplyFilter(); // Повторно применяем текущий фильтр к обновленным данным
                 }
             }
         }
-
-
+        // Обработчики кнопок навигации
         private void WorkersButton_Click(object sender, RoutedEventArgs e)
         {
-            WorkersWindow workersWindow =new WorkersWindow(_userData);
+            WorkersWindow workersWindow = new WorkersWindow(_userData);
             workersWindow.Show();
             this.Close();
         }
-
         private void HistoryReportsButton_Click(object sender, RoutedEventArgs e)
         {
             HistoryReportsWindow historyReportsWindow = new HistoryReportsWindow(_userData.Id);

@@ -134,5 +134,102 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <Style TargetType="{x:Type DataGrid}">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#CCCCCC"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="RowHeight" Value="40"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="HeadersVisibility" Value="Column"/>
+            <Setter Property="SelectionMode" Value="Single"/>
+            <Setter Property="SelectionUnit" Value="FullRow"/>
+            <Setter Property="HorizontalGridLinesBrush" Value="#EEEEEE"/>
+            <Setter Property="VerticalGridLinesBrush" Value="#EEEEEE"/>
+            <Setter Property="AlternatingRowBackground" Value="#F9F9F9"/>
+            <Setter Property="Margin" Value="5"/>
+        </Style>
+
+        <!-- Стиль для заголовков столбцов -->
+        <Style TargetType="{x:Type DataGridColumnHeader}">
+            <Setter Property="Background" Value="#4CAF50"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="10 5"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="BorderThickness" Value="0 0 1 0"/>
+            <Setter Property="BorderBrush" Value="#3E8C41"/>
+        </Style>
+
+        <Style x:Key="DefaultCellStyle" TargetType="{x:Type TextBlock}">
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+
+        <!-- Центрированный текст -->
+        <Style x:Key="CenteredCellStyle" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource DefaultCellStyle}">
+            <Setter Property="TextAlignment" Value="Center"/>
+        </Style>
+
+        <!-- Выравнивание по левому краю -->
+        <Style x:Key="LeftAlignedCellStyle" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource DefaultCellStyle}">
+            <Setter Property="TextAlignment" Value="Left"/>
+        </Style>
+
+        <!-- С переносом текста -->
+        <Style x:Key="WrappedCellStyle" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource LeftAlignedCellStyle}">
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+
+        <!-- Стиль для строк -->
+        <Style TargetType="{x:Type DataGridRow}">
+            <Setter Property="BorderBrush" Value="#EEEEEE"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#E8F5E9"/>
+                </Trigger>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#C8E6C9"/>
+                    <Setter Property="BorderBrush" Value="#81C784"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Стиль для статусов -->
+        <Style x:Key="StatusCellStyle" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource CenteredCellStyle}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding status_id}" Value="1">
+                    <Setter Property="Foreground" Value="#FF5722"/>
+                    <Setter Property="FontWeight" Value="SemiBold"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding status_id}" Value="2">
+                    <Setter Property="Foreground" Value="#4CAF50"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="DataGridButtonStyle" TargetType="{x:Type Button}">
+            <Setter Property="Background" Value="#4CAF50"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="8 4"/>
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#388E3C"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Стиль для кнопки удаления -->
+        <Style x:Key="DataGridDeleteButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource DataGridButtonStyle}">
+            <Setter Property="Background" Value="#F44336"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#D32F2F"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </Application.Resources>
 </Application>
