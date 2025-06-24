@@ -30,9 +30,9 @@
                             <PasswordBox x:Name="passwordTextBox" Background="Transparent" BorderThickness="0" Padding="10" Foreground="White" FontSize="16"/>
                         </Border>
                     </StackPanel>
-                    <CheckBox Content="Запомнить меня" HorizontalAlignment="Center" Foreground="White" Margin="0,20,0,0"/>
+                    
 
-                    <Button Content="Войти" Background="#4CAF50"  Foreground="White" Width="158" Height="50" Margin="0,40,0,0" HorizontalAlignment="Center" Click="btnLoginClick">
+                    <Button Content="Войти" Background="#4CAF50"  Foreground="White" Width="158" Height="50" Margin="0,50,0,0" HorizontalAlignment="Center" Click="btnLoginClick">
                         <Button.Style>
                             <Style TargetType="Button">
                                 <Setter Property="Template">
@@ -50,7 +50,7 @@
                             </Style>
                         </Button.Style>
                     </Button>
-                    <TextBlock Text="Забыли пароль?" Foreground="White" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Center" />
+                    
                 </StackPanel>
             </Border>
         </Grid>

@@ -9,112 +9,146 @@
         WindowStartupLocation="CenterScreen"
         Title="Рабочий персонал" Height="700" Width="1380">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="317*"/>
-            <RowDefinition Height="25*"/>
-        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="230"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
         <!-- Боковая панель -->
-        <StackPanel Background="#4CAF50" Grid.RowSpan="2">
+        <StackPanel Background="#4CAF50">
             <Image Source="C:\Users\Дмитрий\Desktop\иконки\iconProfile.png" Width="120" Height="106" Margin="0,70,0,0"/>
             <TextBlock Name="userNameTextBlock" Text="" FontSize="20" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,15,0,0" />
 
             <Button Name="HistoryReportsButton" Background="#00000000" BorderBrush="#00000000" BorderThickness="0" Width="230" Margin="0,65,0,0" Click="HistoryReportsButton_Click">
                 <Image Source="/icons/historyReports.png" Stretch="Fill" />
-
             </Button>
 
-            <Button Name="WorkersButton" Background="#00000000" BorderBrush="#00000000" BorderThickness="0" Width="230" Margin="0,20,0,0"  >
+            <Button Name="WorkersButton" Background="#00000000" BorderBrush="#00000000" BorderThickness="0" Width="230" Margin="0,20,0,0">
                 <Image Source="/icons/workersActive.png" Stretch="Fill" />
             </Button>
 
             <Button Name="RepairsButton" Background="#00000000" BorderBrush="#00000000" BorderThickness="0" Width="230" Margin="0,20,0,0" Click="RepairsButton_Click">
-                <Image Source="/icons/repairs.png"  Stretch="Fill"/>
+                <Image Source="/icons/repairs.png" Stretch="Fill"/>
             </Button>
         </StackPanel>
 
+        <!-- Основная область -->
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="60"/>
+            </Grid.RowDefinitions>
 
-        <Grid Grid.Column="1" Margin="10">
-            <DataGrid Name="WorkersDataGrid" 
-              AutoGenerateColumns="False" 
-              IsReadOnly="True"
-              Margin="30,30,30,0" >
+            <!-- Панель поиска -->
+            <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,10,0,10" HorizontalAlignment="Center">
+                <TextBlock Text="Поиск: " VerticalAlignment="Center" FontSize="18" FontWeight="Bold" Margin="5" />
+                <TextBox Name="SearchTextBox"
+                         Margin="0"
+                         Padding="5"
+                         FontSize="16"
+                         VerticalContentAlignment="Center"
+                         TextWrapping="Wrap"
+                         VerticalAlignment="Center"
+                         TextChanged="SearchTextBox_TextChanged" 
+                         Width="450">
+                    <TextBox.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="5"/>
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
+            </StackPanel>
 
-                <DataGrid.Columns>
-                    <!-- ID -->
-                    <DataGridTextColumn Header="ID" 
-                               Binding="{Binding Id}" 
-                               Width="Auto"
-                               ElementStyle="{StaticResource CenteredCellStyle}"/>
+            <!-- Таблица с данными -->
+            <ScrollViewer Grid.Row="1">
+                <DataGrid Name="WorkersDataGrid"
+                          AutoGenerateColumns="False"
+                          IsReadOnly="True"
+                          Background="White"
+                          Margin="30,0,30,0">
+                    <DataGrid.Columns>
+                        <!-- ID -->
+                        <DataGridTextColumn Header="ID" 
+                                   Binding="{Binding Id}" 
+                                   Width="Auto"
+                                   ElementStyle="{StaticResource CenteredCellStyle}"/>
+                        <!-- Фамилия -->
+                        <DataGridTextColumn Header="Фамилия" 
+                                   Binding="{Binding surname}" 
+                                   Width="*"
+                                   ElementStyle="{StaticResource LeftAlignedCellStyle}"/>
+                        <!-- Имя -->
+                        <DataGridTextColumn Header="Имя" 
+                                   Binding="{Binding name}" 
+                                   Width="*"
+                                   ElementStyle="{StaticResource LeftAlignedCellStyle}"/>
+                        <!-- Отчество -->
+                        <DataGridTextColumn Header="Отчество" 
+                                   Binding="{Binding patronymic}" 
+                                   Width="*"
+                                   ElementStyle="{StaticResource LeftAlignedCellStyle}"/>
+                        <!-- Телефон -->
+                        <DataGridTextColumn Header="Телефон" 
+                                   Binding="{Binding phone}" 
+                                   Width="*"
+                                   ElementStyle="{StaticResource LeftAlignedCellStyle}"/>
+                        <!-- Дата рождения -->
+                        <DataGridTextColumn Header="Дата рождения" 
+                                   Binding="{Binding date_of_birthday, StringFormat='dd/MM/yyyy'}" 
+                                   Width="Auto"
+                                   ElementStyle="{StaticResource CenteredCellStyle}"/>
+                        <!-- Логин -->
+                        <DataGridTextColumn Header="Логин" 
+                                   Binding="{Binding login}" 
+                                   Width="*"
+                                   ElementStyle="{StaticResource LeftAlignedCellStyle}"/>
+                        <!-- Кнопка редактирования -->
+                        <DataGridTemplateColumn Header="Редактировать" 
+                                      Width="Auto">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Name="EditButton" 
+                                   Content="Редактировать" 
+                                   Style="{StaticResource DataGridButtonStyle}"
+                                   Click="EditButton_Click"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <!-- Кнопка удаления -->
+                        <DataGridTemplateColumn Header="Удалить" 
+                                      Width="Auto">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Name="DeleteButton" 
+                                   Content="Удалить" 
+                                   Style="{StaticResource DataGridDeleteButtonStyle}"
+                                   Click="DeleteButton_Click"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </ScrollViewer>
 
-                    <!-- Фамилия -->
-                    <DataGridTextColumn Header="Фамилия" 
-                               Binding="{Binding surname}" 
-                               Width="*"
-                               ElementStyle="{StaticResource LeftAlignedCellStyle}"/>
+            <StackPanel Grid.Row="2" HorizontalAlignment="Right" Orientation="Horizontal">
+                <Button Name="AddCarButton" 
+                        Grid.Row="2" 
+                        Content="Транспортные средства" 
+                        HorizontalAlignment="Right" 
+                        Margin="0,5,40,5" 
+                        Style="{StaticResource GreenRoundedButtonStyle}" 
+                        FontSize="16" 
+                        Click="AddCarButton_Click"/>
 
-                    <!-- Имя -->
-                    <DataGridTextColumn Header="Имя" 
-                               Binding="{Binding name}" 
-                               Width="*"
-                               ElementStyle="{StaticResource LeftAlignedCellStyle}"/>
+                <Button Name="AddWorkerButton" 
+                        Content="Добавить водителя"
+                        Margin="0,5,40,5" 
+                        Style="{StaticResource GreenRoundedButtonStyle}" 
+                        FontSize="16" 
+                        Click="AddWorkerButton_Click"/>
+            </StackPanel>
 
-                    <!-- Отчество -->
-                    <DataGridTextColumn Header="Отчество" 
-                               Binding="{Binding patronymic}" 
-                               Width="*"
-                               ElementStyle="{StaticResource LeftAlignedCellStyle}"/>
-
-                    <!-- Телефон -->
-                    <DataGridTextColumn Header="Телефон" 
-                               Binding="{Binding phone}" 
-                               Width="*"
-                               ElementStyle="{StaticResource LeftAlignedCellStyle}"/>
-
-                    <!-- Дата рождения -->
-                    <DataGridTextColumn Header="Дата рождения" 
-                               Binding="{Binding date_of_birthday, StringFormat='dd/MM/yyyy'}" 
-                               Width="Auto"
-                               ElementStyle="{StaticResource CenteredCellStyle}"/>
-
-                    <!-- Логин -->
-                    <DataGridTextColumn Header="Логин" 
-                               Binding="{Binding login}" 
-                               Width="*"
-                               ElementStyle="{StaticResource LeftAlignedCellStyle}"/>
-
-                    <!-- Кнопка редактирования -->
-                    <DataGridTemplateColumn Header="Редактировать" 
-                                  Width="Auto">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Button Name="EditButton" 
-                               Content="Редактировать" 
-                               Style="{StaticResource DataGridButtonStyle}"
-                               Click="EditButton_Click"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-
-                    <!-- Кнопка удаления -->
-                    <DataGridTemplateColumn Header="Удалить" 
-                                  Width="Auto">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Button Name="DeleteButton" 
-                               Content="Удалить" 
-                               Style="{StaticResource DataGridDeleteButtonStyle}"
-                               Click="DeleteButton_Click"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                </DataGrid.Columns>
-            </DataGrid>
         </Grid>
-        <Button Name="AddWorkerButton" Grid.Column="1" Grid.Row="2" Content="Добавить водителя" HorizontalAlignment="Right" Margin="0 5 40 5" Style="{StaticResource GreenRoundedButtonStyle}" FontSize="16" Click="AddWorkerButton_Click"/>
     </Grid>
 </Window>

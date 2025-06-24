@@ -63,7 +63,7 @@
                 <TextBox Name="AddressResidentialTextBox" Grid.Row="6" Grid.Column="1" Margin="5" Text="" Height="35" Style="{StaticResource RoundedTextBoxStyle}"  MaxLength="100"/>
 
                 <TextBlock Text="Номер банковского счёта" Grid.Row="7"  Grid.Column="1" Margin="5"/>
-                <TextBox Name="BankAccountNumberTextBox" Grid.Row="8" Grid.Column="1" Margin="5" Text="" Height="35" Style="{StaticResource RoundedTextBoxStyle}"  MaxLength="20"/>
+                <TextBox Name="BankAccountNumberTextBox" Grid.Row="8" Grid.Column="1" Margin="5" Text="" Height="35" Style="{StaticResource RoundedTextBoxStyle}"  MaxLength="9"/>
 
                 <TextBlock Text="Транспортное средство" Grid.Row="9" Grid.Column="1" Margin="5"/>
                 <ComboBox Name="CarBrandTextBox" Grid.Row="10" Grid.Column="1" Margin="5" Height="32"/>

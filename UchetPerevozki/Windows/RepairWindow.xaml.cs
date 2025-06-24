@@ -34,7 +34,7 @@ namespace UchetPerevozki.Windows
 
             LoadRepairsDataAsync();
             _userData = userData;
-            userNameTextBlock.Text = $"{_userData.Name} {_userData.Name}";
+            userNameTextBlock.Text = $"{_userData.Name} {_userData.Surname}";
         }
         private async Task LoadRepairsDataAsync()
         {
@@ -51,14 +51,14 @@ namespace UchetPerevozki.Windows
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка при загрузке данных: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Ошибка при загрузке данных", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         private async Task<List<RepairWithUserName>> GetRepairsWithUsersAsync()
         {
             using (var client = new HttpClient())
             {
-                string baseAddress = File.ReadAllText("C:\\Users\\Дмитрий\\source\\repos\\UchetPerevozki\\UchetPerevozki\\ipAddress.txt").Trim();
+                string baseAddress = File.ReadAllText("ipAddress.txt").Trim();
                 client.BaseAddress = new Uri(baseAddress);
                 try
                 {
@@ -72,7 +72,7 @@ namespace UchetPerevozki.Windows
                     else
                     {
                         string errorContent = await response.Content.ReadAsStringAsync();
-                        throw new Exception($"Ошибка при получении данных о ремонтах: {response.StatusCode} - {errorContent}");
+                        throw new Exception($"Ошибка при получении данных о ремонтах.");
                     }
                 }
                 catch (HttpRequestException httpEx)

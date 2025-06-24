@@ -26,13 +26,11 @@ namespace UchetPerevozki
         {
             using (var client = new HttpClient())
             {
-                string baseAddress = File.ReadAllText("C:\\Users\\Дмитрий\\source\\repos\\UchetPerevozki\\UchetPerevozki\\ipAddress.txt").Trim();
+                string baseAddress = File.ReadAllText("ipAddress.txt").Trim();
                 client.BaseAddress = new Uri(baseAddress);
 
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-
 
                 var userLogin = new UserLogin
                 {

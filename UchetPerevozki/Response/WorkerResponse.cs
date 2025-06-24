@@ -1,13 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace UchetPerevozki.Response
 {
-    public class WorkerResponse
+    public class WorkerResponse : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+        // Вспомогательный метод для вызова события PropertyChanged
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
         public int Id { get; set; }
         public string name { get; set; }
         public string surname { get; set; }

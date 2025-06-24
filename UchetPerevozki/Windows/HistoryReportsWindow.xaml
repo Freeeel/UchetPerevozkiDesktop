@@ -6,8 +6,8 @@
         xmlns:local="clr-namespace:UchetPerevozki"
         mc:Ignorable="d"
         Loaded="WindowLoaded"
-        ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
         FontSize="15"
         Title="История отчётов" Height="700" Width="1380">
     <Grid>
@@ -22,7 +22,7 @@
             <TextBlock Name="userNameTextBlock" Text="" FontSize="20" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,15,0,0" />
 
             <Button Name="HistoryReportsButton" Background="#00000000" BorderBrush="#00000000" BorderThickness="0" Width="230" Margin="0,65,0,0">
-               <Image Source="/icons/historyReportsActive.png" Stretch="Fill"/>
+                <Image Source="/icons/historyReportsActive.png" Stretch="Fill"/>
 
             </Button>
 
@@ -39,27 +39,29 @@
         <Grid Grid.Column="1" >
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
-                <!-- Для поля поиска -->
                 <RowDefinition Height="*"/>
-                <!-- Для DataGrid -->
+                <RowDefinition Height="60"/>
             </Grid.RowDefinitions>
-            <!-- Поле для поиска -->
-            <TextBox Grid.Row="0"
+            
+            <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0 10 0 10" HorizontalAlignment="Center">
+                <TextBlock Text="Поиск: " VerticalAlignment="Center"  FontSize="18" FontWeight="Bold" Margin="5" />
+                <TextBox
                      Name="SearchTextBox"
-                     Margin="30,10,30,10"
+                     Margin="0"
                      Padding="5"
                      FontSize="16"
                      VerticalContentAlignment="Center"
                      TextWrapping="Wrap"
                      VerticalAlignment="Center"
-                     HorizontalAlignment="Stretch"
-                     TextChanged="SearchTextBox_TextChanged">
-                <TextBox.Resources>
-                    <Style TargetType="{x:Type Border}">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </TextBox.Resources>
-            </TextBox>
+                     TextChanged="SearchTextBox_TextChanged" Width="450">
+                    <TextBox.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="5"/>
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
+            </StackPanel>
+
             <ScrollViewer Grid.Row="1">
                 <DataGrid Name="ReportsDataGrid"
                           AutoGenerateColumns="False"
@@ -91,9 +93,38 @@
                            Width="*"
                            Binding="{Binding user_full_name}"
                            ElementStyle="{StaticResource LeftAlignedCellStyle}"/>
+                        <DataGridTemplateColumn Header="Детали" Width="Auto">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Name="EditButton" 
+                                       Content="Детали" 
+                                       Style="{StaticResource DataGridButtonStyle}"
+                                       Click="EditButton_Click"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <!-- Кнопка удаления -->
+                        <DataGridTemplateColumn Header="Удалить" Width="Auto">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Name="DeleteButton" 
+                                        Content="Удалить" 
+                                        Style="{StaticResource DataGridDeleteButtonStyle}"
+                                        Click="DeleteButton_Click"/> 
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
             </ScrollViewer>
+            <Button Name="ExportToExcelButton" 
+                    Grid.Row="2" 
+                    Content="Генерация отчёта" 
+                    HorizontalAlignment="Right" 
+                    Margin="0,5,40,5" 
+                    Style="{StaticResource GreenRoundedButtonStyle}" 
+                    FontSize="16" 
+                    Click="ExportToExcelButton_Click"/>
         </Grid>
     </Grid>
 </Window>

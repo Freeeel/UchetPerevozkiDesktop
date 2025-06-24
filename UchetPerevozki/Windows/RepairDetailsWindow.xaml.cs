@@ -65,13 +65,13 @@ namespace UchetPerevozki.Windows
                 this.DialogResult = false;
                 return;
             }
-            var updatePayload = new { status_id = 2 }; // Payload для сервера
+            var updatePayload = new { status_id = 2 };
             var jsonPayload = JsonSerializer.Serialize(updatePayload);
             var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
             string baseUrl;
             try
             {
-                baseUrl = File.ReadAllText("C:\\Users\\Дмитрий\\source\\repos\\UchetPerevozki\\UchetPerevozki\\ipAddress.txt").Trim();
+                baseUrl = File.ReadAllText("ipAddress.txt").Trim();
             }
             catch (Exception ex)
             {

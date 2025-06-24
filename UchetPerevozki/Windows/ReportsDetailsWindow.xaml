@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:UchetPerevozki.Windows"
         mc:Ignorable="d"
-        FontSize="15"
+        FontSize="12"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
         Title="Детали отчёта" Height="720" Width="900">

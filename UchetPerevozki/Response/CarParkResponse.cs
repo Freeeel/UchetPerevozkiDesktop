@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace UchetPerevozki.Response
 {
-    public class CarResponse
+    public class CarParkResponse
     {
-        public int Id { get; set; }
+        public int id { get; set; }
         public string state_number { get; set; }
         public string model { get; set; }
         public string stamp { get; set; }

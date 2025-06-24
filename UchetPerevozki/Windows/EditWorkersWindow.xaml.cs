@@ -39,7 +39,7 @@ namespace UchetPerevozki.Windows
         {
             using (var client = new HttpClient())
             {
-                string baseAddress = File.ReadAllText("C:\\Users\\Дмитрий\\source\\repos\\UchetPerevozki\\UchetPerevozki\\ipAddress.txt").Trim();
+                string baseAddress = File.ReadAllText("ipAddress.txt").Trim();
                 client.BaseAddress = new Uri(baseAddress);
                 try
                 {
@@ -172,7 +172,7 @@ namespace UchetPerevozki.Windows
 
         private async Task<bool> UpdateWorkerAsync(int workerId, object updatedData)
         {
-            string baseAddress = File.ReadAllText("C:\\Users\\Дмитрий\\source\\repos\\UchetPerevozki\\UchetPerevozki\\ipAddress.txt").Trim();
+            string baseAddress = File.ReadAllText("ipAddress.txt").Trim();
             using (HttpClient client = new HttpClient())
             {
                 client.BaseAddress = new Uri(baseAddress);
@@ -192,7 +192,7 @@ namespace UchetPerevozki.Windows
 
         private async Task<int> GetCarIdFromAPI(string model, string stamp, string stateNumber)
         {
-            string baseAddress = File.ReadAllText("C:\\Users\\Дмитрий\\source\\repos\\UchetPerevozki\\UchetPerevozki\\ipAddress.txt").Trim();
+            string baseAddress = File.ReadAllText("ipAddress.txt").Trim();
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(baseAddress);
@@ -262,7 +262,7 @@ namespace UchetPerevozki.Windows
         {
             using (var client = new HttpClient())
             {
-                string baseAddress = File.ReadAllText("C:\\Users\\Дмитрий\\source\\repos\\UchetPerevozki\\UchetPerevozki\\ipAddress.txt").Trim();
+                string baseAddress = File.ReadAllText("ipAddress.txt").Trim();
                 client.BaseAddress = new Uri(baseAddress);
                 var response = await client.GetAsync($"/user/{userId}/car");
                 if (response.IsSuccessStatusCode)

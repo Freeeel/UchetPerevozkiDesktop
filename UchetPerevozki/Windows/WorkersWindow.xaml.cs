@@ -1,7 +1,9 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -23,12 +25,16 @@ namespace UchetPerevozki
     public partial class WorkersWindow : Window
     {
         private UserResponse _userData;
+        private ObservableCollection<WorkerResponse> _allWorkers;
+
         public WorkersWindow(UserResponse userData)
         {
             InitializeComponent();
-            LoadData();
             _userData = userData;
             userNameTextBlock.Text = $"{_userData.Name} {_userData.Surname}";
+            LoadData();
+            
+            
         }
 
         private async void LoadData()
@@ -36,11 +42,12 @@ namespace UchetPerevozki
             try
             {
                 var workers = await GetWorkersAsync();
-                WorkersDataGrid.ItemsSource = workers;
+                _allWorkers = new ObservableCollection<WorkerResponse>(workers);
+                WorkersDataGrid.ItemsSource = _allWorkers;
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка: {ex.Message}");
+                MessageBox.Show($"Ошибка сети");
             }
         }
 
@@ -48,9 +55,9 @@ namespace UchetPerevozki
         {
             using (var client = new HttpClient())
             {
-                string baseAddress = File.ReadAllText("C:\\Users\\Дмитрий\\source\\repos\\UchetPerevozki\\UchetPerevozki\\ipAddress.txt").Trim();
-                client.BaseAddress = new Uri(baseAddress); // Заменить на отдельный класс
-                var response = await client.GetAsync("/users/role/1"); // Получаем работников с role_id 1
+                string baseAddress = File.ReadAllText("ipAddress.txt").Trim();
+                client.BaseAddress = new Uri(baseAddress);
+                var response = await client.GetAsync("/users/role/1");
                 if (response.IsSuccessStatusCode)
                 {
                     var responseData = await response.Content.ReadAsStringAsync();
@@ -58,27 +65,31 @@ namespace UchetPerevozki
                 }
                 else
                 {
-                    throw new Exception($"Ошибка при получении работников: {response.StatusCode}");
+                    throw new Exception($"Ошибка при получении работников!");
                 }
             }
         }
 
-        private async Task<CarResponse> GetCarByWorkerIdAsync(int userId)
+        private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            using (var client = new HttpClient())
+            string searchText = SearchTextBox.Text.ToLower().Trim();
+            if (string.IsNullOrWhiteSpace(searchText))
             {
-                string baseAddress = File.ReadAllText("C:\\Users\\Дмитрий\\source\\repos\\UchetPerevozki\\UchetPerevozki\\ipAddress.txt").Trim();
-                client.BaseAddress = new Uri(baseAddress);
-                var response = await client.GetAsync($"/user/{userId}/car");
-                if (response.IsSuccessStatusCode)
-                {
-                    var responseData = await response.Content.ReadAsStringAsync();
-                    return JsonConvert.DeserializeObject<CarResponse>(responseData);
-                }
-                else
-                {
-                    throw new Exception($"Ошибка при получении машины для пользователя {userId}: {response.StatusCode}");
-                }
+                WorkersDataGrid.ItemsSource = _allWorkers;
+            }
+            else
+            {
+                var filteredWorkers = _allWorkers.Where(worker =>
+                    (worker.surname?.ToLower().Contains(searchText) ?? false) ||
+                    (worker.name?.ToLower().Contains(searchText) ?? false) ||
+                    (worker.patronymic?.ToLower().Contains(searchText) ?? false) ||
+                    (worker.phone?.ToLower().Contains(searchText) ?? false) ||
+                    (worker.login?.ToLower().Contains(searchText) ?? false) ||
+                    worker.Id.ToString().Contains(searchText) ||
+                    worker.date_of_birthday.ToString("dd.MM.yyyy").Contains(searchText)
+                ).ToList();
+
+                WorkersDataGrid.ItemsSource = filteredWorkers;
             }
         }
 
@@ -86,23 +97,15 @@ namespace UchetPerevozki
         {
             using (var client = new HttpClient())
             {
-                string baseAddress = File.ReadAllText("C:\\Users\\Дмитрий\\source\\repos\\UchetPerevozki\\UchetPerevozki\\ipAddress.txt").Trim();
+                string baseAddress = File.ReadAllText("ipAddress.txt").Trim();
                 client.BaseAddress = new Uri(baseAddress);
-                // Make a DELETE request to your FastAPI endpoint
-                // The endpoint should be similar to what was previously generated: "/users/{user_id}"
                 var response = await client.DeleteAsync($"/users/{userId}");
                 if (!response.IsSuccessStatusCode)
                 {
                     var errorContent = await response.Content.ReadAsStringAsync();
-                    throw new Exception($"Ошибка API: {response.StatusCode} - {errorContent}");
+                    throw new Exception($"Ошибка сети!");
                 }
             }
-        }
-
-        private void btnAddWorker(object sender, RoutedEventArgs e)
-        {
-            AddWorkersWindow addWorkersWindow = new AddWorkersWindow();
-            addWorkersWindow.Show();
         }
 
         private void HistoryReportsButton_Click(object sender, RoutedEventArgs e)
@@ -119,42 +122,37 @@ namespace UchetPerevozki
             this.Close();
         }
 
-
         private void EditButton_Click(object sender, RoutedEventArgs e)
         {
-            WorkerResponse selectedWorker = (sender as Button).DataContext as WorkerResponse;
-            if (selectedWorker != null)
+            if ((sender as Button).DataContext is WorkerResponse selectedWorker)
             {
-                // Открыть окно редактирования для selectedWorker
                 EditWorkersWindow editWindow = new EditWorkersWindow(selectedWorker);
-                editWindow.ShowDialog(); // ShowDialog для блокировки родительского окна
-                LoadData(); // Обновить данные после редактирования
+                editWindow.ShowDialog();
+                LoadData();
             }
-
         }
 
-        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        private async void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
-            WorkerResponse selectedWorker = (sender as Button).DataContext as WorkerResponse;
-            if (selectedWorker != null)
+            if ((sender as Button).DataContext is WorkerResponse selectedWorker)
             {
                 MessageBoxResult result = MessageBox.Show(
                     $"Вы уверены, что хотите удалить работника: {selectedWorker.surname} {selectedWorker.name}?",
                     "Подтверждение удаления",
                     MessageBoxButton.YesNo,
-                    MessageBoxImage.Warning
-                );
+                    MessageBoxImage.Warning);
+
                 if (result == MessageBoxResult.Yes)
                 {
                     try
                     {
-                        DeleteWorkerAsync(selectedWorker.Id); // Assuming 'id' is the unique identifier
+                        await DeleteWorkerAsync(selectedWorker.Id);
                         MessageBox.Show("Работник успешно удален.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
-                        LoadData(); // Reload data to update the DataGrid
+                        LoadData();
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show($"Ошибка при удалении работника: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show($"Ошибка при удалении работника", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                 }
             }
@@ -163,7 +161,20 @@ namespace UchetPerevozki
         private void AddWorkerButton_Click(object sender, RoutedEventArgs e)
         {
             AddWorkersWindow addWorkersWindow = new AddWorkersWindow();
-            addWorkersWindow.ShowDialog();
+            if (addWorkersWindow.ShowDialog() == true)
+            {
+                LoadData();
+            }
         }
+
+        private void AddCarButton_Click(object sender, RoutedEventArgs e)
+        {
+            CarWindow carWindow = new CarWindow();
+            if (carWindow.ShowDialog() == true)
+            {
+                LoadData();
+            }
+        }
+
     }
 }
