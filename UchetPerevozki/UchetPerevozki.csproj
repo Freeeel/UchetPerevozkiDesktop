@@ -35,7 +35,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>convertio.in_logo1.ico</ApplicationIcon>
+    <ApplicationIcon>convertio.in_logo1 %281%29.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ClosedXML, Version=0.105.0.0, Culture=neutral, PublicKeyToken=fd1eb21b62ae805b, processorArchitecture=MSIL">
@@ -289,6 +289,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="convertio.in_logo1.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="convertio.in_logo1 %281%29.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
